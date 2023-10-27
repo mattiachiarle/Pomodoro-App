@@ -2,38 +2,57 @@ import * as React from 'react';
 import {BottomNavigation, Text} from 'react-native-paper';
 import {SafeAreaProvider} from 'react-native-safe-area-context';
 
-const MusicRoute = () => <Text>Music</Text>;
+const TimerRoute = () => <Text>Timer</Text>;
 
-const AlbumsRoute = () => <Text>Albums</Text>;
+const CallRoute = () => <Text>Call</Text>;
 
-const RecentsRoute = () => <Text>Recents</Text>;
+const FlashcardsRoute = () => <Text>Flashcards</Text>;
 
-const NotificationsRoute = () => <Text>Notifications</Text>;
+const ToDoRoute = () => <Text>To Do</Text>;
+
+const SettingsRoute = () => <Text>Settings</Text>;
 
 const MyComponent = () => {
   const [index, setIndex] = React.useState(0);
   const [routes] = React.useState([
     {
-      key: 'music',
-      title: 'Favorites',
-      focusedIcon: 'heart',
-      unfocusedIcon: 'heart-outline',
+      key: 'timer',
+      title: 'Timer',
+      focusedIcon: 'timer',
+      unfocusedIcon: 'timer-outline',
     },
-    {key: 'albums', title: 'Albums', focusedIcon: 'album'},
-    {key: 'recents', title: 'Recents', focusedIcon: 'history'},
     {
-      key: 'notifications',
-      title: 'Notifications',
-      focusedIcon: 'bell',
-      unfocusedIcon: 'bell-outline',
+      key: 'call',
+      title: 'Call',
+      focusedIcon: 'account-group',
+      unfocusedIcon: 'account-group-outline',
+    },
+    {
+      key: 'flashcards',
+      title: 'Flashcards',
+      focusedIcon: 'card-text',
+      unfocusedIcon: 'card-text-outline',
+    },
+    {
+      key: 'todo',
+      title: 'To-Do',
+      focusedIcon: 'check-bold',
+      unfocusedIcon: 'check-outline',
+    },
+    {
+      key: 'settings',
+      title: 'Settings',
+      focusedIcon: 'cog',
+      unfocusedIcon: 'cog-outline',
     },
   ]);
 
   const renderScene = BottomNavigation.SceneMap({
-    music: MusicRoute,
-    albums: AlbumsRoute,
-    recents: RecentsRoute,
-    notifications: NotificationsRoute,
+    timer: TimerRoute,
+    call: CallRoute,
+    flashcards: FlashcardsRoute,
+    todo: ToDoRoute,
+    settings: SettingsRoute,
   });
 
   return (
