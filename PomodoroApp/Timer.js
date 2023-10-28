@@ -12,6 +12,7 @@ const styles = StyleSheet.create({
 });
 
 function MyTimer({expiryTimestamp}) {
+  const startAmt = 100; // hardcoded for testing
   const time = new Date();
   const {
     totalSeconds,
@@ -25,20 +26,23 @@ function MyTimer({expiryTimestamp}) {
     resume,
     restart,
   } = useTimer({
-    expiryTimestamp,
+    expiryTimestamp: time.setSeconds(time.getSeconds() + startAmt),
     onExpire: () => console.warn('onExpire called'),
     autoStart: false,
   });
 
+  console.log(totalSeconds);
+
   return (
     <>
-      <Text>{seconds}</Text>
+      <Text>{totalSeconds}</Text>
+      <ProgressBar animatedValue={totalSeconds / startAmt}></ProgressBar>
       <Button onPress={resume}>Start</Button>
       <Button onPress={pause}>Stop</Button>
       <Button
         onPress={() => {
           const time = new Date();
-          restart(time.setSeconds(time.getSeconds() + 100), false);
+          restart(time.setSeconds(time.getSeconds() + startAmt), false);
         }}>
         Restart
       </Button>
@@ -50,8 +54,7 @@ function TimerScreen() {
   const time = new Date();
   return (
     <View>
-      <MyTimer
-        expiryTimestamp={time.setSeconds(time.getSeconds() + 100)}></MyTimer>
+      <MyTimer />
     </View>
   );
 }
