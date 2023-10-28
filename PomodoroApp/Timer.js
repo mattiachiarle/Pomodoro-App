@@ -1,7 +1,11 @@
+import 'react-native-gesture-handler';
 import React from 'react';
+import {useState} from 'react';
 import {Text, Button, ProgressBar} from 'react-native-paper';
 import {View, StyleSheet} from 'react-native';
-import {useTimer, useTime} from 'react-timer-hook';
+import {useTimer} from 'react-timer-hook';
+import CircularProgress from 'react-native-circular-progress-indicator';
+
 const styles = StyleSheet.create({
   container: {
     flex: 1,
@@ -27,18 +31,27 @@ function MyTimer({expiryTimestamp}) {
     restart,
   } = useTimer({
     expiryTimestamp: time.setSeconds(time.getSeconds() + startAmt),
-    onExpire: () => console.warn('onExpire called'),
+    onExpire: () => {
+      console.warn('onExpire called');
+    },
     autoStart: false,
   });
 
-  console.log(totalSeconds);
-
   return (
-    <>
-      <Text>{totalSeconds}</Text>
-      <ProgressBar animatedValue={totalSeconds / startAmt}></ProgressBar>
-      <Button onPress={resume}>Start</Button>
-      <Button onPress={pause}>Stop</Button>
+    <View style={styles.container}>
+      <CircularProgress value={totalSeconds} />
+      <Button
+        onPress={() => {
+          resume();
+        }}>
+        Start
+      </Button>
+      <Button
+        onPress={() => {
+          pause();
+        }}>
+        Stop
+      </Button>
       <Button
         onPress={() => {
           const time = new Date();
@@ -46,17 +59,13 @@ function MyTimer({expiryTimestamp}) {
         }}>
         Restart
       </Button>
-    </>
+    </View>
   );
 }
 
 function TimerScreen() {
   const time = new Date();
-  return (
-    <View>
-      <MyTimer />
-    </View>
-  );
+  return <MyTimer />;
 }
 
 export default TimerScreen;
