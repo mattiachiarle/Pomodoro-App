@@ -1,69 +1,62 @@
-import * as React from 'react';
-import {BottomNavigation, Text} from 'react-native-paper';
+import {NavigationContainer} from '@react-navigation/native';
+import React from 'react';
+import {Text} from 'react-native';
+import {createMaterialBottomTabNavigator} from 'react-native-paper/react-navigation';
 import {SafeAreaProvider} from 'react-native-safe-area-context';
+import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 
-const TimerRoute = () => <Text>Timer</Text>;
+const Tab = createMaterialBottomTabNavigator();
 
-const CallRoute = () => <Text>Call</Text>;
+const HomeScreen = () => {
+  <Text>Home</Text>;
+};
+const SettingsScreen = () => <Text>Settings</Text>;
+const CallsScreen = () => <Text>Calls</Text>;
+const FlashcardsScreen = () => <Text>Flashcards</Text>;
+const ToDoScreen = () => <Text>ToDo</Text>;
 
-const FlashcardsRoute = () => <Text>Flashcards</Text>;
+function getTabBarIcon({name, focused, color, size}) {
+  let iconName;
+  switch (name) {
+    case 'Home':
+      iconName = 'home';
+      break;
+    case 'ToDo':
+      iconName = 'check';
+      break;
+  }
+  focused ? name : name + '-outline';
+  return <Icon name={iconName} color={color} size={size}></Icon>;
+}
 
-const ToDoRoute = () => <Text>To Do</Text>;
+function getScreenOptions({route}) {
+  return {
+    tabBarIcon: getTabBarIcon(route.name, focused, color, size),
+    tabBarActiveTintColor: 'tomato',
+    tabBarInactiveTintColor: 'gray',
+  };
+}
 
-const SettingsRoute = () => <Text>Settings</Text>;
-
-const MyComponent = () => {
-  const [index, setIndex] = React.useState(0);
-  const [routes] = React.useState([
-    {
-      key: 'timer',
-      title: 'Timer',
-      focusedIcon: 'timer',
-      unfocusedIcon: 'timer-outline',
-    },
-    {
-      key: 'call',
-      title: 'Call',
-      focusedIcon: 'account-group',
-      unfocusedIcon: 'account-group-outline',
-    },
-    {
-      key: 'flashcards',
-      title: 'Flashcards',
-      focusedIcon: 'card-text',
-      unfocusedIcon: 'card-text-outline',
-    },
-    {
-      key: 'todo',
-      title: 'To-Do',
-      focusedIcon: 'check-bold',
-      unfocusedIcon: 'check-outline',
-    },
-    {
-      key: 'settings',
-      title: 'Settings',
-      focusedIcon: 'cog',
-      unfocusedIcon: 'cog-outline',
-    },
-  ]);
-
-  const renderScene = BottomNavigation.SceneMap({
-    timer: TimerRoute,
-    call: CallRoute,
-    flashcards: FlashcardsRoute,
-    todo: ToDoRoute,
-    settings: SettingsRoute,
-  });
-
+function MyTabs() {
   return (
     <SafeAreaProvider>
-      <BottomNavigation
-        navigationState={{index, routes}}
-        onIndexChange={setIndex}
-        renderScene={renderScene}
-      />
+      <NavigationContainer>
+        <Tab.Navigator
+          screenOptions={({route}) => {
+            getScreenOptions(route);
+          }}>
+          <Tab.Screen name="Home" component={HomeScreen} />
+          <Tab.Screen name="ToDo" component={ToDoScreen} />
+        </Tab.Navigator>
+      </NavigationContainer>
     </SafeAreaProvider>
   );
-};
+}
+/*
+        <Tab.Screen name="Calls" component={CallsScreen} />
+        <Tab.Screen name="Flashcards" component={FlashcardsScreen} />
+        <Tab.Screen name="To Do" component={ToDoScreen} />
+        <Tab.Screen name="Settings" component={SettingsScreen} />
+        */
 
-export default MyComponent;
+export default MyTabs;
