@@ -1,95 +1,38 @@
-import {NavigationContainer} from '@react-navigation/native';
 import React from 'react';
-import {Text} from 'react-native';
-import {createMaterialBottomTabNavigator} from 'react-native-paper/react-navigation';
-import {PaperProvider} from 'react-native-paper';
-import {SafeAreaProvider} from 'react-native-safe-area-context';
-import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
-import SettingsScreen from './Settings';
-import FlashcardsScreen from './Flashcards';
-import ToDoScreen from './ToDo';
-import CallsScreen from './Calls';
-import TimerScreen from './Timer';
+import { View, Image, TouchableOpacity, StyleSheet } from 'react-native';
 
-const Tab = createMaterialBottomTabNavigator();
-
-const HomeScreen = () => {
-  <Text>Home</Text>;
+const HomeScreen = ({ navigation }) => {
+    return (
+        <View style={styles.container}>
+            <View style={styles.row}>
+                <TouchableOpacity onPress={() => navigation.navigate('TimerScreen')}>
+                    <Image source={require('./icons/timer_icon.png')} style={styles.icon} />
+                </TouchableOpacity>
+                {/* The timer icon and button are interactive; we just need to attach timer here. */}
+                <Image source={require('./icons/video_icon.png')} style={styles.icon} />
+            </View>
+            <View style={styles.row}>
+                <Image source={require('./icons/book_icon.png')} style={styles.icon} />
+                <Image source={require('./icons/checklist_icon.png')} style={styles.icon} />
+            </View>
+        </View>
+    );
 };
 
-function getIcon({focused, color, size}, name) {
-  let iconName;
-  iconName = focused ? name : name + '-outline';
-  return (
-    <MaterialCommunityIcons
-      name={iconName}
-      color={color}
-      size={size}></MaterialCommunityIcons>
-  );
-}
+const styles = StyleSheet.create({
+    container: {
+        flex: 1,
+        justifyContent: 'center',
+        alignItems: 'center',
+    },
+    row: {
+        flexDirection: 'row',
+    },
+    icon: {
+        width: 120,  // Increased the width
+        height: 120, // Increased the height
+        margin: 20,
+    },
+});
 
-function MyTabs() {
-  return (
-    <SafeAreaProvider>
-      <PaperProvider>
-        <NavigationContainer>
-          <Tab.Navigator>
-            <Tab.Screen
-              name="Timer"
-              component={TimerScreen}
-              options={{
-                tabBarLabel: 'Timer',
-                tabBarIcon: ({focused, color, size}) =>
-                  getIcon({focused, color, size}, 'timer'),
-              }}
-            />
-            <Tab.Screen
-              name="Calls"
-              component={CallsScreen}
-              options={{
-                tabBarLabel: 'Calls',
-                tabBarIcon: ({focused, color, size}) =>
-                  getIcon({focused, color, size}, 'account-group'),
-              }}
-            />
-            <Tab.Screen
-              name="ToDo"
-              component={ToDoScreen}
-              options={{
-                tabBarLabel: 'To Do',
-                tabBarIcon: ({focused, color, size}) =>
-                  getIcon({focused, color, size}, 'check'),
-              }}
-            />
-            <Tab.Screen
-              name="Flashcards"
-              component={FlashcardsScreen}
-              options={{
-                tabBarLabel: 'Flashcards',
-                tabBarIcon: ({focused, color, size}) =>
-                  getIcon({focused, color, size}, 'card-text'),
-              }}
-            />
-            <Tab.Screen
-              name="Settings"
-              component={SettingsScreen}
-              options={{
-                tabBarLabel: 'Settings',
-                tabBarIcon: ({focused, color, size}) =>
-                  getIcon({focused, color, size}, 'cog'),
-              }}
-            />
-          </Tab.Navigator>
-        </NavigationContainer>
-      </PaperProvider>
-    </SafeAreaProvider>
-  );
-}
-/*
-        <Tab.Screen name="Calls" component={CallsScreen} />
-        <Tab.Screen name="Flashcards" component={FlashcardsScreen} />
-        <Tab.Screen name="To Do" component={ToDoScreen} />
-        <Tab.Screen name="Settings" component={SettingsScreen} />
-        */
-
-export default MyTabs;
+export default HomeScreen;
