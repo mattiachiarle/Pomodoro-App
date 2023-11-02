@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { View, Text, StyleSheet, Button } from 'react-native';
+import { View, Text, Image, StyleSheet, Button } from 'react-native';
 
 const Timer = ({ route }) => {
   const { minutes, breakMinutes, navigation, name, numIteration } = route.params;
@@ -46,6 +46,7 @@ const Timer = ({ route }) => {
   return (
     <View style={styles.container}>
     <Text style={styles.nameText}>{name}</Text>
+    <Image source={require('./icons/timer_icon.png')} style={styles.icon} />
       <View style={styles.box}>
         <Text style={styles.timer}>{formatTime()}</Text>
       </View>
@@ -72,6 +73,11 @@ const styles = StyleSheet.create({
   },
   timer: {
     fontSize: 48,
+  },
+  icon: {
+      width: 120,
+      height: 120,
+      margin: 20,
   },
 });
 

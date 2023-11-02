@@ -32,7 +32,6 @@ function MyTabs() {
               <Stack.Screen name="SetupTimer" component={SetupScreen} />
               <Stack.Screen name="Timer" component={TimerScreen} />
               <Stack.Screen name="Pause" component={Pause} options={{ title: 'Pause' }} />
-
             </Stack.Navigator>
           </NavigationContainer>
         </HeaderButtonsProvider>

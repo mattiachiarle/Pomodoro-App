@@ -6,7 +6,7 @@ const HomeScreen = ({navigation}) => {
   return (
     <View style={styles.container}>
       <View style={styles.row}>
-        <TouchableOpacity onPress={() => navigation.navigate('SetupTimer')}>
+        <TouchableOpacity onPress={() => navigation.navigate('SetupTimer',{navigation: navigation})}>
           <Image
             source={require('./icons/timer_icon.png')}
             style={styles.icon}
