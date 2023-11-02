@@ -11,6 +11,7 @@ import CallsScreen from './Calls';
 import HomeScreen from './Home';
 import TimerScreen from './Timer';
 import SetupScreen from './SetupTimer.js';
+import Pause from './Pause.js'
 import {MaterialHeaderButtons} from './Header';
 import {HeaderButtonsProvider} from 'react-navigation-header-buttons';
 
@@ -30,6 +31,8 @@ function MyTabs() {
               <Stack.Screen name="Calls" component={CallsScreen} />
               <Stack.Screen name="SetupTimer" component={SetupScreen} />
               <Stack.Screen name="Timer" component={TimerScreen} />
+              <Stack.Screen name="Pause" component={Pause} options={{ title: 'Pause' }} />
+
             </Stack.Navigator>
           </NavigationContainer>
         </HeaderButtonsProvider>
