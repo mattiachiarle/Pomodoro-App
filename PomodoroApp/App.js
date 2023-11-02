@@ -1,38 +1,41 @@
 import React from 'react';
-import { View, Image, TouchableOpacity, StyleSheet } from 'react-native';
+import {NavigationContainer} from '@react-navigation/native';
+import {PaperProvider, Text, Button} from 'react-native-paper';
+import {SafeAreaProvider} from 'react-native-safe-area-context';
+import {createNativeStackNavigator} from '@react-navigation/native-stack';
+import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
+import SettingsScreen from './Settings';
+import FlashcardsScreen from './Flashcards';
+import ToDoScreen from './ToDo';
+import CallsScreen from './Calls';
+import HomeScreen from './Home';
+import TimerScreen from './Timer';
+import SetupScreen from './SetupTimer.js';
+import {MaterialHeaderButtons} from './Header';
+import {HeaderButtonsProvider} from 'react-navigation-header-buttons';
 
-const HomeScreen = ({ navigation }) => {
-    return (
-        <View style={styles.container}>
-            <View style={styles.row}>
-                <TouchableOpacity onPress={() => navigation.navigate('TimerScreen')}>
-                    <Image source={require('./icons/timer_icon.png')} style={styles.icon} />
-                </TouchableOpacity>
-                {/* The timer icon and button are interactive; we just need to attach timer here. */}
-                <Image source={require('./icons/video_icon.png')} style={styles.icon} />
-            </View>
-            <View style={styles.row}>
-                <Image source={require('./icons/book_icon.png')} style={styles.icon} />
-                <Image source={require('./icons/checklist_icon.png')} style={styles.icon} />
-            </View>
-        </View>
-    );
-};
+const Stack = createNativeStackNavigator();
 
-const styles = StyleSheet.create({
-    container: {
-        flex: 1,
-        justifyContent: 'center',
-        alignItems: 'center',
-    },
-    row: {
-        flexDirection: 'row',
-    },
-    icon: {
-        width: 120,  // Increased the width
-        height: 120, // Increased the height
-        margin: 20,
-    },
-});
+function MyTabs() {
+  return (
+    <SafeAreaProvider>
+      <PaperProvider>
+        <HeaderButtonsProvider>
+          <NavigationContainer>
+            <Stack.Navigator>
+              <Stack.Screen name="Home" component={HomeScreen} />
+              <Stack.Screen name="Settings" component={SettingsScreen} />
+              <Stack.Screen name="Flashcards" component={FlashcardsScreen} />
+              <Stack.Screen name="ToDo" component={ToDoScreen} />
+              <Stack.Screen name="Calls" component={CallsScreen} />
+              <Stack.Screen name="SetupTimer" component={SetupScreen} />
+              <Stack.Screen name="Timer" component={TimerScreen} />
+            </Stack.Navigator>
+          </NavigationContainer>
+        </HeaderButtonsProvider>
+      </PaperProvider>
+    </SafeAreaProvider>
+  );
+}
 
-export default HomeScreen;
+export default MyTabs;
