@@ -1,5 +1,5 @@
 import React from 'react';
-import {View, TextInput, StyleSheet, Text} from 'react-native';
+import {View, Image, TextInput, StyleSheet, Text} from 'react-native';
 import {Button} from 'react-native-paper';
 
 const styles = StyleSheet.create({
@@ -9,6 +9,11 @@ const styles = StyleSheet.create({
     margin: 12,
     borderWidth: 1,
     padding: 10,
+  },
+  icon: {
+    width: 120,
+    height: 120,
+    margin: 20,
   },
 });
 
@@ -25,6 +30,7 @@ function SetupTimer() {
         onChangeText={onChangeName}
         value={name}
       />
+      <Image source={require('./icons/timer_icon.png')} style={styles.icon} />
       <Text>Work:</Text>
       <TextInput
         style={styles.input}
