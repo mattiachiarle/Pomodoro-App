@@ -6,14 +6,22 @@ const HomeScreen = ({navigation}) => {
   return (
     <View style={styles.container}>
       <View style={styles.row}>
-        <TouchableOpacity onPress={() => navigation.navigate('SetupTimer',{navigation: navigation})}>
+        <TouchableOpacity
+          onPress={() =>
+            navigation.navigate('SetupTimer', {navigation: navigation})
+          }>
           <Image
             source={require('./icons/timer_icon.png')}
             style={styles.icon}
           />
         </TouchableOpacity>
         {/* The timer icon and button are interactive; we just need to attach timer here. */}
-        <Image source={require('./icons/video_icon.png')} style={styles.icon} />
+        <TouchableOpacity onPress={() => navigation.navigate('Calls')}>
+          <Image
+            source={require('./icons/video_icon.png')}
+            style={styles.icon}
+          />
+        </TouchableOpacity>
       </View>
       <View style={styles.row}>
         <Image source={require('./icons/book_icon.png')} style={styles.icon} />
