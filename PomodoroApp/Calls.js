@@ -6,6 +6,7 @@ import {
   TextInput,
   Button,
   SafeAreaView,
+  Text,
 } from 'react-native';
 import {JitsiMeeting} from '@jitsi/react-native-sdk/index';
 import {Video} from '@signalwire-community/react-native';
@@ -31,14 +32,14 @@ function CallsScreen() {
 
   return (
     <View style={styles.page}>
-      <View style={styles.callPlaceholder}>
+      <View style={styles.callVideoPortion}>
         <View style={styles.bookRow}>
           <Image
             style={styles.bookImage}
             source={require('./icons/book_icon.png')}></Image>
         </View>
         {!callReady ? (
-          <>
+          <View style={''}>
             <TextInput
               onChangeText={setRoom}
               placeholder="Enter room name here"
@@ -52,7 +53,7 @@ function CallsScreen() {
               style={{height: 32, width: 32}}
               title="Join"
             />
-          </>
+          </View>
         ) : (
           // <>
           //   <JitsiMeeting
@@ -71,36 +72,27 @@ function CallsScreen() {
           //</>
         )}
       </View>
-      <CallTimerControls style={styles.controls}></CallTimerControls>
+      <View style={styles.controls}>
+        <CallTimerControls />
+      </View>
     </View>
   );
 }
 
 const styles = StyleSheet.create({
   page: {flex: 1, justifyContent: 'center', flexDirection: 'column'},
-  callPlaceholder: {
+  callVideoPortion: {
     flex: 6,
-    justifyContent: 'center',
+    justifyContent: 'space-between',
     flexDirection: 'column',
     backgroundColor: 'red',
   },
-  avatarRow: {
-    flex: 1,
-    flexDirection: 'column',
-    justifyContent: 'center',
-    backgroundColor: 'green',
-    maxHeight: 'min',
-  },
   bookRow: {
-    flex: 1,
+    flexGrow: 30,
+    maxHeight: 30,
     flexDirection: 'column',
-    justifyContent: 'center',
+    alignSelf: 'flex-end',
     backgroundColor: 'blue',
-  },
-  avatarImage: {
-    maxWidth: 100,
-    maxHeight: 100,
-    alignSelf: 'center',
   },
   bookImage: {
     maxWidth: 30,
@@ -113,9 +105,12 @@ const styles = StyleSheet.create({
     margin: 12,
     borderWidth: 1,
     padding: 10,
+    alignSelf: 'center',
   },
   controls: {
     flex: 4,
+    flexDirection: 'column',
+    justifyContent: 'center',
   },
 });
 
