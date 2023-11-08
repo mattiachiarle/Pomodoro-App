@@ -25,10 +25,12 @@ const HomeScreen = ({navigation}) => {
       </View>
       <View style={styles.row}>
         <Image source={require('./icons/book_icon.png')} style={styles.icon} />
+        <TouchableOpacity onPress={() => navigation.navigate('ToDo',{navigation: navigation})}>
         <Image
           source={require('./icons/checklist_icon.png')}
           style={styles.icon}
         />
+        </TouchableOpacity>
       </View>
     </View>
   );
