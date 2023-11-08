@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { View, Text, TextInput, TouchableOpacity, FlatList, Button, StyleSheet } from 'react-native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
-function ToDoScreen() {
+function ToDoScreen({ route }) {
   const [toDos, setToDos] = useState([]);
   const [newToDo, setNewToDo] = useState('');
 
@@ -37,7 +37,10 @@ function ToDoScreen() {
 
     saveToDos();
   }, [toDos]);
-
+ // Check if we have navigation params to determine if we came from the Pause screen
+  const fromPause = route.params?.fromScreen === 'Pause';
+  const pauseParams = route.params;
+  const navigation = route.params?.navigation
   const addToDo = () => {
     if (newToDo.trim()) {
       const newToDos = [...toDos, { id: Date.now(), text: newToDo, completed: false }];
@@ -50,7 +53,12 @@ function ToDoScreen() {
     const newToDos = toDos.map(toDo => toDo.id === id ? { ...toDo, completed: !toDo.completed } : toDo);
     setToDos(newToDos);
   };
-
+    // Function to navigate back to the Pause screen with all the necessary parameters
+      const backToPause = () => {
+        navigation.navigate('Pause', {
+          ...pauseParams
+        });
+      };
   const Checkbox = ({ isChecked, onPress }) => {
     return (
       <TouchableOpacity style={styles.checkbox} onPress={onPress}>
@@ -83,6 +91,9 @@ function ToDoScreen() {
           </View>
         )}
       />
+      {fromPause && (
+              <Button title="Back to Pause" onPress={backToPause} />
+            )}
     </View>
   );
 }

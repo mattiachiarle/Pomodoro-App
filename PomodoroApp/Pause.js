@@ -44,6 +44,18 @@ const Pause = ({ route }) => {
       <View style={styles.box}>
         <Text style={styles.timer}>{formatTime()}</Text>
       </View>
+      <Button
+              title="Track your ToDos"
+              onPress={() => navigation.navigate('ToDo', {
+                fromScreen: 'Pause',
+                breakSeconds: breakSeconds,
+                minutes: minutes,
+                breakMinutes: breakMinutes,
+                name: name,
+                numIteration: numIteration,
+                navigation: navigation,
+              })}
+            />
     </View>
   );
 };
