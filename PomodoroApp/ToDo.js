@@ -1,8 +1,8 @@
 import React, { useState, useEffect } from 'react';
-import { View, Text, TextInput, Button, FlatList, StyleSheet } from 'react-native';
+import { View, Text, TextInput, TouchableOpacity, FlatList, Button, StyleSheet } from 'react-native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
-function ToDoScreen(){
+function ToDoScreen() {
   const [toDos, setToDos] = useState([]);
   const [newToDo, setNewToDo] = useState('');
 
@@ -51,6 +51,14 @@ function ToDoScreen(){
     setToDos(newToDos);
   };
 
+  const Checkbox = ({ isChecked, onPress }) => {
+    return (
+      <TouchableOpacity style={styles.checkbox} onPress={onPress}>
+        {isChecked && <View style={styles.checked} />}
+      </TouchableOpacity>
+    );
+  };
+
   return (
     <View style={styles.container}>
       <TextInput
@@ -65,16 +73,19 @@ function ToDoScreen(){
         keyExtractor={item => item.id.toString()}
         renderItem={({ item }) => (
           <View style={styles.toDoItem}>
+            <Checkbox
+              isChecked={item.completed}
+              onPress={() => toggleCompletion(item.id)}
+            />
             <Text style={[styles.toDoText, item.completed && styles.toDoCompleted]}>
               {item.text}
             </Text>
-            <Button title={item.completed ? 'Mark Incomplete' : 'Mark Complete'} onPress={() => toggleCompletion(item.id)} />
           </View>
         )}
       />
     </View>
   );
-};
+}
 
 const styles = StyleSheet.create({
   container: {
@@ -91,16 +102,32 @@ const styles = StyleSheet.create({
   toDoItem: {
     flexDirection: 'row',
     alignItems: 'center',
-    justifyContent: 'space-between',
     padding: 10,
     borderBottomWidth: 1,
     borderBottomColor: 'gray',
   },
   toDoText: {
     fontSize: 18,
+    flex: 1, // Added to ensure text takes up the remaining space
   },
   toDoCompleted: {
     textDecorationLine: 'line-through',
+  },
+  checkbox: {
+    height: 24,
+    width: 24,
+    borderRadius: 12,
+    borderWidth: 2,
+    borderColor: '#000',
+    alignItems: 'center',
+    justifyContent: 'center',
+    marginRight: 10,
+  },
+  checked: {
+    height: 12,
+    width: 12,
+    borderRadius: 6,
+    backgroundColor: '#000',
   },
 });
 
