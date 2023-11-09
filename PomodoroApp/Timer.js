@@ -2,14 +2,14 @@ import React, { useState, useEffect } from 'react';
 import { View, Text, Image, StyleSheet, Button } from 'react-native';
 
 const Timer = ({ route }) => {
-  const { minutes, breakMinutes, navigation, name, numIteration } = route.params;
+  const { minutes, breakMinutes, navigation, name, numIteration, modulesHistory } = route.params;
   const [seconds, setSeconds] = useState(minutes * 60);
   const [isActive, setIsActive] = useState(true);
 
   useEffect(() => {
     setSeconds(minutes * 60);
-    setIsActive(true)
-  },[numIteration]);
+    setIsActive(true);
+  }, [numIteration]);
 
   useEffect(() => {
     let interval;
@@ -26,15 +26,18 @@ const Timer = ({ route }) => {
         breakMinutes: breakMinutes,
         name: name,
         navigation: navigation,
-        numIteration: numIteration+1
+        numIteration: numIteration + 1,
+        modulesHistory: [...modulesHistory, name] 
       });
     }
     return () => clearInterval(interval);
-  }, [isActive, seconds, navigation, minutes, breakMinutes, name]);
+  }, [isActive, seconds, navigation, minutes, breakMinutes, name, numIteration, modulesHistory]);
 
   const resetTimer = () => {
     setIsActive(false);
-    navigation.navigate("SetupTimer");
+    navigation.navigate("SetupTimer", {
+      modulesHistory: [...modulesHistory, name] 
+    });
   };
 
   const formatTime = () => {
@@ -43,14 +46,26 @@ const Timer = ({ route }) => {
     return `${String(displayMinutes).padStart(2, '0')}:${String(secondsLeft).padStart(2, '0')}`;
   };
 
+  
+  const previousModules = modulesHistory.slice(0, -1);
+
   return (
     <View style={styles.container}>
-    <Text style={styles.nameText}>{name}</Text>
-    <Image source={require('./icons/timer_icon.png')} style={styles.icon} />
+      <Text style={styles.nameText}>{name}</Text>
+      <Image source={require('./icons/timer_icon.png')} style={styles.icon} />
       <View style={styles.box}>
         <Text style={styles.timer}>{formatTime()}</Text>
       </View>
       <Button onPress={resetTimer} title="Stop" />
+      {/* Display the history of modules, excluding the current one */}
+      {previousModules.length > 0 && (
+        <View>
+          <Text style={styles.moduleHistoryLabel}>Previous Modules:</Text>
+          {previousModules.map((moduleName, index) => (
+            <Text key={index} style={styles.moduleHistoryText}>{moduleName}</Text>
+          ))}
+        </View>
+      )}
     </View>
   );
 };
@@ -61,10 +76,18 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
   },
-   nameText: {
-      fontSize: 24,
-      fontWeight: 'bold',
-    },
+  nameText: {
+    fontSize: 24,
+    fontWeight: 'bold',
+  },
+  moduleHistoryLabel: {
+    fontSize: 18,
+    fontWeight: 'bold',
+    marginTop: 32,
+  },
+  moduleHistoryText: {
+    fontSize: 18,
+  },
   box: {
     borderWidth: 2,
     borderColor: 'black',
@@ -75,10 +98,12 @@ const styles = StyleSheet.create({
     fontSize: 48,
   },
   icon: {
-      width: 120,
-      height: 120,
-      margin: 20,
+    width: 120,
+    height: 120,
+    margin: 20,
   },
 });
 
 export default Timer;
+
+/* Display the history of modules, excluding the current one */
