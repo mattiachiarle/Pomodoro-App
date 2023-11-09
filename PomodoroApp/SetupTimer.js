@@ -1,9 +1,9 @@
 import React from 'react';
-import {View, Image, TextInput, StyleSheet, Text} from 'react-native';
-import {Button} from 'react-native-paper';
+import { View, Image, TextInput, StyleSheet, Text } from 'react-native';
+import { Button } from 'react-native-paper';
 
 const styles = StyleSheet.create({
-container: {
+  container: {
     flex: 1,
     justifyContent: 'center',
     alignItems: 'center',
@@ -23,21 +23,34 @@ container: {
 });
 
 function SetupTimer({ navigation }) {
-
   const [name, onChangeName] = React.useState('');
   const [work, onChangeWork] = React.useState('25');
   const [breakTime, onChangeBreakTime] = React.useState('5');
+  const [modulesHistory, setModulesHistory] = React.useState([]);
+
   const startTimer = () => {
-       const workTime = parseInt(work);
-       const breakTimeInt = parseInt(breakTime);
-       if (!isNaN(workTime) && workTime > 0 && !isNaN(breakTimeInt) && breakTimeInt > 0) {
-         navigation.navigate('Timer', { minutes: workTime, breakMinutes: breakTimeInt, name: name, navigation: navigation, numIteration: 1 });
-       } else {
-         alert('Please enter valid numbers for work and break time.');
-       }
- };
+    const workTime = parseInt(work);
+    const breakTimeInt = parseInt(breakTime);
+    if (!isNaN(workTime) && workTime > 0 && !isNaN(breakTimeInt) && breakTimeInt > 0) {
+      
+      const newModulesHistory = [...modulesHistory, name].slice(-3); 
+      setModulesHistory(newModulesHistory);
+      
+      navigation.navigate('Timer', {
+        minutes: workTime,
+        breakMinutes: breakTimeInt,
+        name: name,
+        navigation: navigation,
+        numIteration: 1,
+        modulesHistory: newModulesHistory
+      });
+    } else {
+      alert('Please enter valid numbers for work and break time.');
+    }
+  };
+
   return (
-    <View>
+    <View style={styles.container}>
       <Text>Name:</Text>
       <TextInput
         style={styles.input}
@@ -59,15 +72,16 @@ function SetupTimer({ navigation }) {
         onChangeText={onChangeBreakTime}
         value={breakTime}
       />
-       <Button onPress={startTimer}>
-              START
-            </Button>
+      <Button onPress={startTimer}>
+        START
+      </Button>
     </View>
   );
 }
 
-function SetupScreen({navigation}) {
-  return <SetupTimer navigation={navigation}/>;
+function SetupScreen({ navigation }) {
+  return <SetupTimer navigation={navigation} />;
 }
 
 export default SetupScreen;
+/* Display the history of modules, excluding the current one */
