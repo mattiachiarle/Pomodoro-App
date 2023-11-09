@@ -11,30 +11,41 @@ import {
 } from 'react-native';
 import {useTimer} from 'react-timer-hook';
 
-function CallsTimerControls({timerState}) {
+function CallsTimerControls() {
   const [showTimerSelection, setShowTimerSelection] = useState(true);
   const [showTimerInput, setShowTimerInput] = useState(true);
+  const [onBreak, setOnBreak] = useState(false);
   const [moduleTime, setModuleTime] = useState(0);
   const [breakTime, setBreakTime] = useState(0);
-  const [onBreak, setOnBreak] = useState(false);
   const [moduleName, setModuleName] = useState('');
+  let output = null;
 
-  function TimerEntry() {
-    return (
+  if (showTimerSelection) {
+    output = (
+      <View style={styles.controlsWindow}>
+        <IconButton text={'For you'}></IconButton>
+        <IconButton text={'For everyone'}></IconButton>
+      </View>
+    );
+  } else if (!showTimerSelection && showTimerInput) {
+    output = (
       <View style={styles.timerInputWindow}>
         <View style={styles.timerInputRow}>
           <Text style={{fontSize: 20, justifyContent: 'center'}}>Name: </Text>
           <TextInput
             style={{height: 40, width: 90, borderWidth: 1}}
-            onChangeText={newText =>
-              setModuleName(parseInt(newText) * 60)
-            }></TextInput>
+            onChangeText={newText => {
+              setModuleName(newText);
+            }}></TextInput>
         </View>
         <View style={styles.timerInputRow}>
           <Text style={styles.timerInputLabel}>Modules:</Text>
           <TextInput
             style={styles.timerInputTextbox}
-            onChange={newText => setModuleTime(parseInt(newText) * 60)}
+            onChangeText={newText => {
+              setModuleTime(parseInt(newText) * 60);
+            }}
+            defaultValue="25"
             keyboardType="numeric"></TextInput>
           <Text style={styles.timerInputLabel}>mins</Text>
         </View>
@@ -43,15 +54,26 @@ function CallsTimerControls({timerState}) {
           <TextInput
             style={styles.timerInputTextbox}
             keyboardType="numeric"
-            onChangeText={newText =>
-              setBreakTime(parseInt(newText) * 60)
-            }></TextInput>
+            defaultValue="5"
+            onChangeText={newText => {
+              setBreakTime(parseInt(newText) * 60);
+            }}></TextInput>
           <Text style={styles.timerInputLabel}>mins</Text>
         </View>
-        <Button title="Start" onPress={() => setShowTimerInput(false)}></Button>
+        <Button
+          title="Start"
+          onPress={() => {
+            setShowTimerInput(false);
+          }}></Button>
       </View>
     );
+  } else if (!showTimerSelection && !showTimerInput) {
+    const time = new Date();
+    const duration = onBreak ? breakTime * 60 : moduleTime * 60;
+    time.setSeconds(time.getSeconds() + duration);
+    output = <MiniTimer expiryTimestamp={time}></MiniTimer>;
   }
+  return output;
 
   function IconButton({text}) {
     return (
@@ -61,7 +83,6 @@ function CallsTimerControls({timerState}) {
           flexDirection: 'row',
           alignItems: 'center',
           justifyContent: 'space-evenly',
-          backgroundColor: 'green',
           borderWidth: 1,
           margin: 5,
         }}
@@ -76,24 +97,6 @@ function CallsTimerControls({timerState}) {
       </TouchableOpacity>
     );
   }
-  let output = null;
-  if (showTimerSelection) {
-    output = (
-      <View style={styles.controlsWindow}>
-        <IconButton text={'For you'}></IconButton>
-        <IconButton text={'For everyone'}></IconButton>
-      </View>
-    );
-  } else if (!showTimerSelection && showTimerInput) {
-    output = <TimerEntry></TimerEntry>;
-  } else if (!showTimerSelection && !showTimerInput) {
-    const time = new Date();
-    const duration = onBreak ? breakTime : moduleTime;
-    console.log(duration);
-    time.setSeconds(time.getSeconds() + duration);
-    output = <MiniTimer expiryTimestamp={time}></MiniTimer>;
-  }
-  return output;
 }
 
 function MiniTimer({expiryTimestamp}) {
@@ -108,23 +111,24 @@ function MiniTimer({expiryTimestamp}) {
     pause,
     resume,
     restart,
-  } = useTimer({
-    expiryTimestamp,
-    onExpire: () => {
-      if (!showTimerInput && !onBreak) {
-        setShowTimerInput(true);
-      }
-    },
-  });
+  } = useTimer({expiryTimestamp});
   return (
-    <View style={{flex: 1, flexDirection: 'column', justifyContent: 'center'}}>
+    <View
+      style={{
+        flex: 1,
+        flexDirection: 'column',
+        justifyContent: 'center',
+        alignItems: 'center',
+      }}>
       <View
         style={{
           width: 100,
           height: 40,
           textAlignVertical: 'center',
           borderWidth: 1,
-        }}></View>
+        }}>
+        <Text>{`${minutes}:${seconds}`}</Text>
+      </View>
     </View>
   );
 }
@@ -139,7 +143,6 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     justifyContent: 'space-evenly',
     maxHeight: '25%',
-    backgroundColor: 'pink',
   },
   timerInputWindow: {
     flex: 1,
@@ -155,7 +158,6 @@ const styles = StyleSheet.create({
     textAlignVertical: 'center',
     fontSize: 30,
     width: 130,
-    backgroundColor: 'green',
   },
   timerInputTextbox: {
     width: 30,

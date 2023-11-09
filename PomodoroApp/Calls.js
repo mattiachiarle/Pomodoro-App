@@ -85,14 +85,12 @@ const styles = StyleSheet.create({
     flex: 6,
     justifyContent: 'space-between',
     flexDirection: 'column',
-    backgroundColor: 'red',
   },
   bookRow: {
     flexGrow: 30,
     maxHeight: 30,
     flexDirection: 'column',
     alignSelf: 'flex-end',
-    backgroundColor: 'blue',
   },
   bookImage: {
     maxWidth: 30,
