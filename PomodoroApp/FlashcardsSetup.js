@@ -25,7 +25,8 @@ const styles = StyleSheet.create({
 function FlashcardsSetup({route}) {
   const [randomNumber, setRandomNumber] = useState('1');
   const [unseenNumber, setUnseenNumber] = useState('1');
-  const {navigation, flashcardSetName, flashcardSet} = route.params;
+  const {navigation, flashcardSetName, flashcardSet, flashcardSetHook} =
+    route.params;
 
   console.log(flashcardSetName);
 
@@ -33,6 +34,7 @@ function FlashcardsSetup({route}) {
     navigation.navigate('FlashcardQuiz', {
       flashcardSet: flashcardSet,
       flashcardSetName: flashcardSetName,
+      flashcardSetHook: flashcardSetHook,
     });
   };
 
@@ -40,6 +42,7 @@ function FlashcardsSetup({route}) {
     navigation.navigate('FlashcardQuiz', {
       flashcardSet: flashcardSet,
       flashcardSetName: flashcardSetName,
+      flashcardSetHook: flashcardSetHook,
     });
   };
 
