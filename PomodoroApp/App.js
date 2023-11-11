@@ -15,6 +15,7 @@ import Pause from './Pause.js';
 import FlashcardQuiz from './FlashcardQuiz.js';
 import {MaterialHeaderButtons} from './Header';
 import {HeaderButtonsProvider} from 'react-navigation-header-buttons';
+import FlashcardsSetup from './FlashcardsSetup';
 
 const Stack = createNativeStackNavigator();
 
@@ -31,6 +32,7 @@ function MyTabs() {
           <Stack.Screen name="Calls" component={CallsScreen} />
           <Stack.Screen name="SetupTimer" component={SetupScreen} />
           <Stack.Screen name="Timer" component={TimerScreen} />
+          <Stack.Screen name="FlashcardsSetup" component={FlashcardsSetup} />
           <Stack.Screen
             name="Pause"
             component={Pause}

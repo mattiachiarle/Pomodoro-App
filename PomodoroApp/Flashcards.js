@@ -36,7 +36,8 @@ function FlashcardsScreen({navigation}) {
   return (
     <Button
       onPress={() => {
-        navigation.navigate('FlashcardQuiz', {
+        navigation.navigate('FlashcardsSetup', {
+          navigation: navigation,
           flashcardSet: flashcardExample,
           flashcardSetName: flashcardSetName,
         });
