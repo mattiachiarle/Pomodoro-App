@@ -12,6 +12,7 @@ import HomeScreen from './Home';
 import TimerScreen from './Timer';
 import SetupScreen from './SetupTimer.js';
 import Pause from './Pause.js';
+import FlashcardQuiz from './FlashcardQuiz.js';
 import {MaterialHeaderButtons} from './Header';
 import {HeaderButtonsProvider} from 'react-navigation-header-buttons';
 
@@ -25,6 +26,7 @@ function MyTabs() {
           <Stack.Screen name="Home" component={HomeScreen} />
           <Stack.Screen name="Settings" component={SettingsScreen} />
           <Stack.Screen name="Flashcards" component={FlashcardsScreen} />
+          <Stack.Screen name="FlashcardQuiz" component={FlashcardQuiz} />
           <Stack.Screen name="ToDo" component={ToDoScreen} />
           <Stack.Screen name="Calls" component={CallsScreen} />
           <Stack.Screen name="SetupTimer" component={SetupScreen} />
