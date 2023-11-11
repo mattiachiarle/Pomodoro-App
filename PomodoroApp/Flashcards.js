@@ -4,9 +4,21 @@ import {View, Text, Button, IconButton} from 'react-native-paper';
 const flashcardExample = {
   name: 'example set',
   items: [
-    {question: 'This is a question 1', answer: 'This is an answer'},
-    {question: 'This is a question 2', answer: 'This is an answer 2'},
-    {question: 'This is a question 3', answer: 'This is an answer 3'},
+    {
+      question: 'This is a question 1',
+      answer: 'This is an answer',
+      seen: false,
+    },
+    {
+      question: 'This is a question 2',
+      answer: 'This is an answer 2',
+      seen: false,
+    },
+    {
+      question: 'This is a question 3',
+      answer: 'This is an answer 3',
+      seen: false,
+    },
   ],
 };
 
@@ -31,18 +43,27 @@ async function saveSet({flashcardSet}) {
 
 function FlashcardsScreen({navigation}) {
   const [flashcardSetName, setFlashcardSetName] = useState('Example Set 1');
-  useEffect(() => {}, []);
+  const [flashcardSet, setFlashcardSet] = useState(flashcardExample);
 
   return (
-    <Button
-      onPress={() => {
-        navigation.navigate('FlashcardQuiz', {
-          flashcardSet: flashcardExample,
-          flashcardSetName: flashcardSetName,
-        });
-      }}>
-      Flashcard quiz placeholder
-    </Button>
+    <>
+      <Button
+        onPress={() => {
+          navigation.navigate('FlashcardQuiz', {
+            flashcardSet: flashcardExample,
+            flashcardSetName: flashcardSetName,
+            flashcardSetHook: setFlashcardSet,
+          });
+        }}>
+        Flashcard quiz placeholder
+      </Button>
+      <Button
+        onPress={() => {
+          console.log(flashcardSet);
+        }}>
+        View state
+      </Button>
+    </>
   );
 }
 

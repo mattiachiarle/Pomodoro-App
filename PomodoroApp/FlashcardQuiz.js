@@ -2,7 +2,7 @@ import {React, useState, useEffect} from 'react';
 import {Text, TouchableOpacity, StyleSheet, View} from 'react-native';
 
 function FlashcardQuiz({route}) {
-  const {flashcardSet, flashcardSetName} = route.params;
+  const {flashcardSet, flashcardSetName, flashcardSetHook} = route.params;
   const [flashcardIndex, setFlashcardIndex] = useState(0);
   const [questionText, setQuestionText] = useState(
     flashcardSet.items[flashcardIndex].question,
@@ -21,6 +21,8 @@ function FlashcardQuiz({route}) {
     setShowAnswer(false);
     setQuestionText(flashcardSet.items[flashcardIndex].question);
     setAnswerText(flashcardSet.items[flashcardIndex].answer);
+    flashcardSet.items[flashcardIndex].seen = true;
+    flashcardSetHook(flashcardSet);
     return;
   }
 
