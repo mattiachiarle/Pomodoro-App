@@ -10,7 +10,7 @@ const flashcardExample = {
   ],
 };
 
-async function loadSet({flashcardSetName, loadHook}) {
+/* async function loadSet({flashcardSetName, loadHook}) {
   try {
     const set = await AsyncStorage.getItem(flashcardSetName);
 
@@ -27,10 +27,10 @@ async function saveSet({flashcardSet}) {
   } catch (e) {
     console.error('Failed to load flashcard set.');
   }
-}
+} */
 
 function FlashcardsScreen({navigation}) {
-  const [flashcardSet, setFlashcardSet] = useState(null);
+  const [flashcardSetName, setFlashcardSetName] = useState('Example Set 1');
   useEffect(() => {}, []);
 
   return (
@@ -38,6 +38,7 @@ function FlashcardsScreen({navigation}) {
       onPress={() => {
         navigation.navigate('FlashcardQuiz', {
           flashcardSet: flashcardExample,
+          flashcardSetName: flashcardSetName,
         });
       }}>
       Flashcard quiz placeholder
