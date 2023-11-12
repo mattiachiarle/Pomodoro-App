@@ -1,4 +1,5 @@
-import {useState} from 'react';
+import AsyncStorage from '@react-native-async-storage/async-storage';
+import {useEffect, useState} from 'react';
 import {View, Text, StyleSheet, TextInput} from 'react-native';
 import {Button} from 'react-native-paper';
 
@@ -25,24 +26,36 @@ const styles = StyleSheet.create({
 function FlashcardsSetup({route}) {
   const [randomNumber, setRandomNumber] = useState('1');
   const [unseenNumber, setUnseenNumber] = useState('1');
-  const {navigation, flashcardSetName, flashcardSet, flashcardSetHook} =
-    route.params;
+  const [flashcardSet, setFlashcardSet] = useState([]);
+  const {navigation, flashcardSetName} = route.params;
 
-  console.log(flashcardSetName);
+  useEffect(() => {
+    const getFlashcards = async () => {
+      const cards = await AsyncStorage.getItem(flashcardSetName);
+      setFlashcardSet(JSON.parse(cards));
+    };
+    getFlashcards();
+  }, []);
 
   const startUnseenQuiz = () => {
+    const unseen = flashcardSet.filter(i => i.seen == false);
+
+    const selected = unseen.slice(0, unseenNumber);
+
     navigation.navigate('FlashcardQuiz', {
-      flashcardSet: flashcardSet,
+      flashcardSet: {name: flashcardSet.name, items: selected},
       flashcardSetName: flashcardSetName,
-      flashcardSetHook: flashcardSetHook,
+      flashcardSetHook: setFlashcardSet,
     });
   };
 
   const startRandomQuiz = () => {
+    const selected = flashcardSet.items.slice(0, randomNumber);
+
     navigation.navigate('FlashcardQuiz', {
-      flashcardSet: flashcardSet,
+      flashcardSet: {name: flashcardSet.name, items: selected},
       flashcardSetName: flashcardSetName,
-      flashcardSetHook: flashcardSetHook,
+      flashcardSetHook: setFlashcardSet,
     });
   };
 
@@ -51,7 +64,10 @@ function FlashcardsSetup({route}) {
   };
 
   const createCard = () => {
-    //TBD
+    navigation.navigate('CreateCard', {
+      flashcardSetName: flashcardSetName,
+      navigation: navigation,
+    });
   };
 
   return (
