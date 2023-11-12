@@ -1,9 +1,7 @@
-import {ANDROID_SCREENSHARING_ENABLED} from '@jitsi/react-native-sdk/react/features/base/flags/constants';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import React, {useState} from 'react';
 import {Button} from 'react-native-paper';
 import {Text, TextInput, StyleSheet, View} from 'react-native';
-import {navigate} from '@jitsi/react-native-sdk/react/features/mobile/navigation/components/conference/ConferenceNavigationContainerRef';
 
 const styles = StyleSheet.create({
   container: {

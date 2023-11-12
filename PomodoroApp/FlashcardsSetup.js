@@ -1,12 +1,11 @@
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import {useEffect, useState} from 'react';
-import {View, Text, StyleSheet, TextInput} from 'react-native';
+import {View, Text, StyleSheet, TextInput, Image} from 'react-native';
 import {Button} from 'react-native-paper';
 
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    justifyContent: 'center',
     alignItems: 'center',
   },
   input: {
@@ -15,20 +14,22 @@ const styles = StyleSheet.create({
     margin: 12,
     borderWidth: 1,
     padding: 10,
+    color: 'black',
   },
   icon: {
-    width: 120,
-    height: 120,
-    margin: 20,
+    width: 50,
+    height: 50,
+    margin: 10,
   },
   titleContainer: {
-    // flex: 1,
     fontWeight: 'bold',
     justifyContent: 'center',
     alignItems: 'center',
     textAlignVertical: 'top',
-    fontSize: 25,
+    fontSize: 30,
     color: 'black',
+    margin: 20,
+    flexDirection: 'row',
   },
 });
 
@@ -111,13 +112,19 @@ function FlashcardsSetup({route}) {
     <>
       <View style={styles.titleContainer}>
         <Text style={styles.titleContainer}>{flashcardSetName} quiz</Text>
+        <Image
+          style={styles.icon}
+          source={require('./icons/share_icon.png')}></Image>
       </View>
 
       <View style={styles.container}>
-        <View>
+        <View
+          style={{
+            flexDirection: 'row',
+          }}>
           <Button
             mode="outlined"
-            style={{borderRadius: 0}}
+            style={{borderRadius: 0, margin: 10}}
             onPress={startUnseenQuiz}>
             Start unseen quiz
           </Button>
@@ -129,10 +136,13 @@ function FlashcardsSetup({route}) {
           />
         </View>
 
-        <View>
+        <View
+          style={{
+            flexDirection: 'row',
+          }}>
           <Button
             mode="outlined"
-            style={{borderRadius: 0}}
+            style={{borderRadius: 0, margin: 10}}
             onPress={startRandomQuiz}>
             Start random quiz
           </Button>
@@ -146,37 +156,17 @@ function FlashcardsSetup({route}) {
 
         <Button
           mode="outlined"
-          style={{borderRadius: 0}}
+          style={{borderRadius: 0, margin: 20}}
           onPress={reviewPastAttempts}>
           Review past attempts
         </Button>
 
-        <Button mode="outlined" style={{borderRadius: 0}} onPress={createCard}>
+        <Button
+          mode="outlined"
+          style={{borderRadius: 0, margin: 10}}
+          onPress={createCard}>
           Create new card
         </Button>
-
-        {/* <Text>Name:</Text>
-        <TextInput
-          style={styles.input}
-          onChangeText={onChangeName}
-          value={name}
-        />
-        <Image source={require('./icons/timer_icon.png')} style={styles.icon} />
-        <Text>Work:</Text>
-        <TextInput
-          style={styles.input}
-          keyboardType="numeric"
-          onChangeText={onChangeWork}
-          value={work}
-        />
-        <Text>Break:</Text>
-        <TextInput
-          style={styles.input}
-          keyboardType="numeric"
-          onChangeText={onChangeBreakTime}
-          value={breakTime}
-        />
-        <Button onPress={startTimer}>START</Button> */}
       </View>
     </>
   );

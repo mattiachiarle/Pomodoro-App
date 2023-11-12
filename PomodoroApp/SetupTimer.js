@@ -1,19 +1,27 @@
 import React from 'react';
-import { View, Image, TextInput, StyleSheet, Text } from 'react-native';
-import { Button } from 'react-native-paper';
+import {View, Image, TextInput, StyleSheet, Text} from 'react-native';
+import {Button} from 'react-native-paper';
 
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    justifyContent: 'center',
     alignItems: 'center',
   },
-  input: {
-    height: 40,
-    width: 200,
+  nameInput: {
+    height: 30,
+    width: 100,
     margin: 12,
     borderWidth: 1,
     padding: 10,
+    color: 'black',
+  },
+  timeInput: {
+    height: 40,
+    width: 60,
+    margin: 12,
+    borderWidth: 1,
+    padding: 10,
+    color: 'black',
   },
   icon: {
     width: 120,
@@ -22,7 +30,7 @@ const styles = StyleSheet.create({
   },
 });
 
-function SetupTimer({ navigation }) {
+function SetupTimer({navigation}) {
   const [name, onChangeName] = React.useState('');
   const [work, onChangeWork] = React.useState('25');
   const [breakTime, onChangeBreakTime] = React.useState('5');
@@ -31,18 +39,22 @@ function SetupTimer({ navigation }) {
   const startTimer = () => {
     const workTime = parseInt(work);
     const breakTimeInt = parseInt(breakTime);
-    if (!isNaN(workTime) && workTime > 0 && !isNaN(breakTimeInt) && breakTimeInt > 0) {
-      
-      const newModulesHistory = [...modulesHistory, name].slice(-3); 
+    if (
+      !isNaN(workTime) &&
+      workTime > 0 &&
+      !isNaN(breakTimeInt) &&
+      breakTimeInt > 0
+    ) {
+      const newModulesHistory = [...modulesHistory, name].slice(-3);
       setModulesHistory(newModulesHistory);
-      
+
       navigation.navigate('Timer', {
         minutes: workTime,
         breakMinutes: breakTimeInt,
         name: name,
         navigation: navigation,
         numIteration: 1,
-        modulesHistory: newModulesHistory
+        modulesHistory: newModulesHistory,
       });
     } else {
       alert('Please enter valid numbers for work and break time.');
@@ -51,35 +63,72 @@ function SetupTimer({ navigation }) {
 
   return (
     <View style={styles.container}>
-      <Text>Name:</Text>
-      <TextInput
-        style={styles.input}
-        onChangeText={onChangeName}
-        value={name}
-      />
+      <View
+        style={{
+          flexDirection: 'row',
+        }}>
+        <Text style={{margin: 15, fontSize: 15}}>Name:</Text>
+        <TextInput
+          style={styles.nameInput}
+          onChangeText={onChangeName}
+          value={name}
+        />
+      </View>
       <Image source={require('./icons/timer_icon.png')} style={styles.icon} />
-      <Text>Work:</Text>
-      <TextInput
-        style={styles.input}
-        keyboardType="numeric"
-        onChangeText={onChangeWork}
-        value={work}
-      />
-      <Text>Break:</Text>
-      <TextInput
-        style={styles.input}
-        keyboardType="numeric"
-        onChangeText={onChangeBreakTime}
-        value={breakTime}
-      />
-      <Button onPress={startTimer}>
-        START
+      <View
+        style={{
+          flexDirection: 'row',
+        }}>
+        <Text style={{margin: 12, fontSize: 25, color: 'black'}}>Modules:</Text>
+        <TextInput
+          style={styles.timeInput}
+          keyboardType="numeric"
+          onChangeText={onChangeWork}
+          value={work}
+        />
+        <Text
+          style={{
+            margin: 10,
+            fontSize: 20,
+            color: 'black',
+            textAlignVertical: 'bottom',
+          }}>
+          mins
+        </Text>
+      </View>
+      <View
+        style={{
+          flexDirection: 'row',
+        }}>
+        <Text style={{margin: 12, fontSize: 25, color: 'black'}}>Breaks:</Text>
+        <TextInput
+          style={styles.timeInput}
+          keyboardType="numeric"
+          onChangeText={onChangeBreakTime}
+          value={breakTime}
+        />
+        <Text
+          style={{
+            margin: 10,
+            fontSize: 20,
+            color: 'black',
+            textAlignVertical: 'bottom',
+          }}>
+          mins
+        </Text>
+      </View>
+      <Button
+        mode="outlined"
+        style={{borderRadius: 0, margin: 20, width: 150}}
+        // labelStyle={{fontSize: 160}}
+        onPress={startTimer}>
+        <Text style={{fontSize: 20}}>START</Text>
       </Button>
     </View>
   );
 }
 
-function SetupScreen({ navigation }) {
+function SetupScreen({navigation}) {
   return <SetupTimer navigation={navigation} />;
 }
 
