@@ -16,6 +16,7 @@ const styles = StyleSheet.create({
     borderWidth: 1,
     padding: 10,
     textAlignVertical: 'top',
+    color: 'black',
   },
 });
 
@@ -53,14 +54,14 @@ function CreateCard({route}) {
 
   return (
     <View style={styles.container}>
-      <Text>Question: </Text>
+      <Text style={{color: 'black'}}>Question: </Text>
       <TextInput
         style={styles.input}
         onChangeText={setQuestion}
         value={question}
         multiline={true}
       />
-      <Text>Answer: </Text>
+      <Text style={{color: 'black'}}>Answer: </Text>
       <TextInput style={styles.input} onChangeText={setAnswer} value={answer} />
       <Button onPress={cardCreation}>Create card</Button>
     </View>

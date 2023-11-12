@@ -8,12 +8,13 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
   nameInput: {
-    height: 30,
+    height: 35,
     width: 100,
     margin: 12,
     borderWidth: 1,
     padding: 10,
     color: 'black',
+    textAlignVertical: 'auto',
   },
   timeInput: {
     height: 40,
@@ -67,7 +68,7 @@ function SetupTimer({navigation}) {
         style={{
           flexDirection: 'row',
         }}>
-        <Text style={{margin: 15, fontSize: 15}}>Name:</Text>
+        <Text style={{margin: 15, fontSize: 15, color: 'black'}}>Name:</Text>
         <TextInput
           style={styles.nameInput}
           onChangeText={onChangeName}

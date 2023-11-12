@@ -8,7 +8,6 @@ import {
   SafeAreaView,
   Text,
 } from 'react-native';
-import {JitsiMeeting} from '@jitsi/react-native-sdk/index';
 import {Video} from '@signalwire-community/react-native';
 import CallTimerControls from './CallsTimerControls.js';
 
@@ -21,13 +20,6 @@ function CallsScreen() {
 
   const joinCall = () => {
     setCallReady(true);
-  };
-
-  const eventListeners = {
-    onReadyToClose: () => {
-      setRoom('');
-      setCallReady(false);
-    },
   };
 
   return (
@@ -55,17 +47,6 @@ function CallsScreen() {
             />
           </View>
         ) : (
-          // <>
-          //   <JitsiMeeting
-          //     eventListeners={eventListeners}
-          //     style={{flex: 1, height: '25%', width: '25%'}}
-          //     room={room}
-          //     serverURL={'https://meet.jit.si/'}
-          //     flags={{
-          //       'call-integration.enabled': true,
-          //       'fullscreen.enabled': false,
-          //     }}
-          //   />
           <SafeAreaView>
             <Video token={TOKEN} />
           </SafeAreaView>
@@ -104,6 +85,7 @@ const styles = StyleSheet.create({
     borderWidth: 1,
     padding: 10,
     alignSelf: 'center',
+    color: 'black',
   },
   controls: {
     flex: 4,
