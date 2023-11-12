@@ -11,7 +11,7 @@ const styles = StyleSheet.create({
   },
   input: {
     height: 40,
-    width: 200,
+    width: 40,
     margin: 12,
     borderWidth: 1,
     padding: 10,
@@ -20,6 +20,15 @@ const styles = StyleSheet.create({
     width: 120,
     height: 120,
     margin: 20,
+  },
+  titleContainer: {
+    // flex: 1,
+    fontWeight: 'bold',
+    justifyContent: 'center',
+    alignItems: 'center',
+    textAlignVertical: 'top',
+    fontSize: 25,
+    color: 'black',
   },
 });
 
@@ -35,27 +44,55 @@ function FlashcardsSetup({route}) {
       setFlashcardSet(JSON.parse(cards));
     };
     getFlashcards();
-  }, []);
+  }, [flashcardSetName]);
+
+  const setCardSeen = async index => {
+    const res = flashcardSet.map((o, i) =>
+      i == index ? {question: o.question, answer: o.answer, seen: true} : o,
+    );
+    console.log(res);
+    await AsyncStorage.setItem(flashcardSetName, JSON.stringify(res));
+    setFlashcardSet(res);
+  };
 
   const startUnseenQuiz = () => {
+    if (!flashcardSet) {
+      alert('No flashcards!');
+      return;
+    }
     const unseen = flashcardSet.filter(i => i.seen == false);
+
+    if (unseen.length < unseenNumber) {
+      alert('Not enough unseen!');
+      return;
+    }
 
     const selected = unseen.slice(0, unseenNumber);
 
     navigation.navigate('FlashcardQuiz', {
       flashcardSet: {name: flashcardSet.name, items: selected},
       flashcardSetName: flashcardSetName,
-      flashcardSetHook: setFlashcardSet,
+      flashcardSetHook: setCardSeen,
     });
   };
 
   const startRandomQuiz = () => {
-    const selected = flashcardSet.items.slice(0, randomNumber);
+    if (!flashcardSet) {
+      alert('No flashcards!');
+      return;
+    }
+
+    if (flashcardSet.length < randomNumber) {
+      alert('Not enough flashcards!');
+      return;
+    }
+
+    const selected = flashcardSet.slice(0, randomNumber);
 
     navigation.navigate('FlashcardQuiz', {
       flashcardSet: {name: flashcardSet.name, items: selected},
       flashcardSetName: flashcardSetName,
-      flashcardSetHook: setFlashcardSet,
+      flashcardSetHook: setCardSeen,
     });
   };
 
@@ -72,29 +109,51 @@ function FlashcardsSetup({route}) {
 
   return (
     <>
-      <View style={styles.input}>
-        <Text>{flashcardSetName} quiz</Text>
+      <View style={styles.titleContainer}>
+        <Text style={styles.titleContainer}>{flashcardSetName} quiz</Text>
       </View>
+
       <View style={styles.container}>
-        <Button onPress={startUnseenQuiz}>Start unseen quiz</Button>
-        <TextInput
-          style={styles.input}
-          keyboardType="numeric"
-          onChangeText={setUnseenNumber}
-          value={unseenNumber}
-        />
+        <View>
+          <Button
+            mode="outlined"
+            style={{borderRadius: 0}}
+            onPress={startUnseenQuiz}>
+            Start unseen quiz
+          </Button>
+          <TextInput
+            style={styles.input}
+            keyboardType="numeric"
+            onChangeText={setUnseenNumber}
+            value={unseenNumber}
+          />
+        </View>
 
-        <Button onPress={startRandomQuiz}>Start random quiz</Button>
-        <TextInput
-          style={styles.input}
-          keyboardType="numeric"
-          onChangeText={setRandomNumber}
-          value={randomNumber}
-        />
+        <View>
+          <Button
+            mode="outlined"
+            style={{borderRadius: 0}}
+            onPress={startRandomQuiz}>
+            Start random quiz
+          </Button>
+          <TextInput
+            style={styles.input}
+            keyboardType="numeric"
+            onChangeText={setRandomNumber}
+            value={randomNumber}
+          />
+        </View>
 
-        <Button onPress={reviewPastAttempts}>Review past attempts</Button>
+        <Button
+          mode="outlined"
+          style={{borderRadius: 0}}
+          onPress={reviewPastAttempts}>
+          Review past attempts
+        </Button>
 
-        <Button onPress={createCard}>Create new card</Button>
+        <Button mode="outlined" style={{borderRadius: 0}} onPress={createCard}>
+          Create new card
+        </Button>
 
         {/* <Text>Name:</Text>
         <TextInput

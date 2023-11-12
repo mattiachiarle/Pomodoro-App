@@ -21,8 +21,8 @@ function FlashcardQuiz({route}) {
     setShowAnswer(false);
     setQuestionText(flashcardSet.items[flashcardIndex].question);
     setAnswerText(flashcardSet.items[flashcardIndex].answer);
-    flashcardSet.items[flashcardIndex].seen = true;
-    flashcardSetHook(flashcardSet);
+    // flashcardSet.items[flashcardIndex].seen = true;
+    flashcardSetHook(flashcardIndex);
     return;
   }
 
