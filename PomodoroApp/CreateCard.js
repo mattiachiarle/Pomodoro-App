@@ -32,7 +32,8 @@ function CreateCard({route}) {
         answer: answer,
         seen: false,
       };
-      const currentCards = await AsyncStorage.getItem(flashcardSetName);
+      const tmp = await AsyncStorage.getItem(flashcardSetName);
+      const currentCards = JSON.parse(tmp);
       let jsonCard = null;
       if (currentCards != null) {
         const newCards = [...currentCards, card];

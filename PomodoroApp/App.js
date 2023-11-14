@@ -17,6 +17,7 @@ import {MaterialHeaderButtons} from './Header';
 import {HeaderButtonsProvider} from 'react-navigation-header-buttons';
 import FlashcardsSetup from './FlashcardsSetup';
 import CreateCard from './CreateCard';
+import CreateGroup from './CreateGroup';
 
 const Stack = createNativeStackNavigator();
 
@@ -35,6 +36,7 @@ function MyTabs() {
           <Stack.Screen name="Timer" component={TimerScreen} />
           <Stack.Screen name="FlashcardsSetup" component={FlashcardsSetup} />
           <Stack.Screen name="CreateCard" component={CreateCard} />
+          <Stack.Screen name="CreateGroup" component={CreateGroup} />
           <Stack.Screen
             name="Pause"
             component={Pause}

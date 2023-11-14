@@ -24,7 +24,10 @@ const HomeScreen = ({navigation}) => {
         </TouchableOpacity>
       </View>
       <View style={styles.row}>
-        <TouchableOpacity onPress={() => navigation.navigate('Flashcards')}>
+        <TouchableOpacity
+          onPress={() =>
+            navigation.navigate('Flashcards', {navigation: navigation, id: 0})
+          }>
           <Image
             source={require('./icons/book_icon.png')}
             style={styles.icon}
