@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { View, Text, Image, StyleSheet, Button } from 'react-native';
+import { View, Text, Image, StyleSheet,  TouchableOpacity } from 'react-native';
 
 const Pause = ({ route }) => {
   const { minutes, breakMinutes, name, navigation, numIteration } = route.params;
@@ -40,12 +40,14 @@ const Pause = ({ route }) => {
 
   return (
     <View style={styles.container}>
+    <Text style={styles.titleText}>Break!</Text>
     <Image source={require('./icons/timer_icon.png')} style={styles.icon} />
       <View style={styles.box}>
         <Text style={styles.timer}>{formatTime()}</Text>
       </View>
-      <Button
-              title="Track your ToDos"
+      <TouchableOpacity
+              style={styles.todoButton}
+
               onPress={() => navigation.navigate('ToDo', {
                 fromScreen: 'Pause',
                 breakSeconds: breakSeconds,
@@ -55,7 +57,9 @@ const Pause = ({ route }) => {
                 numIteration: numIteration,
                 navigation: navigation,
               })}
-            />
+            >
+            <Text style={styles.buttonText}>Track your ToDos</Text>
+            </TouchableOpacity>
     </View>
   );
 };
@@ -66,6 +70,13 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
   },
+  titleText: {
+      fontSize: 24,
+      fontWeight: 'bold',
+       color: 'black',
+      textDecorationLine: 'underline', // Underline the title
+      marginBottom: 20, // Space above the timer box
+    },
   box: {
     borderWidth: 2,
     borderColor: 'black',
@@ -80,6 +91,19 @@ const styles = StyleSheet.create({
       height: 120,
       margin: 20,
     },
+      todoButton: {
+        borderWidth: 1,
+        borderColor: 'blue',
+        padding: 10,
+        borderRadius: 5,
+        //alignSelf: 'stretch',
+        marginHorizontal: 20,
+      },
+      buttonText: {
+          color: 'black',
+          textAlign: 'center',
+          fontSize: 16,
+        }
 });
 
 export default Pause;
