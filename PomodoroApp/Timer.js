@@ -31,7 +31,7 @@ const Timer = ({ route }) => {
       });
     }
     return () => clearInterval(interval);
-  }, [isActive, seconds, navigation, minutes, breakMinutes, name, numIteration]);
+  }, [isActive, seconds, navigation, minutes, breakMinutes, name]);
 
   const resetTimer = () => {
     setIsActive(false);

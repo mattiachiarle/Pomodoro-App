@@ -2,14 +2,14 @@ import React, { useState, useEffect } from 'react';
 import { View, Text, Image, StyleSheet,  TouchableOpacity } from 'react-native';
 
 const Pause = ({ route }) => {
-  const { minutes, breakMinutes, name, navigation, numIteration } = route.params;
+  const { minutes, breakMinutes, name, navigation, numIteration, modulesHistory } = route.params;
   const [breakSeconds, setBreakSeconds] = useState(breakMinutes * 60);
   const [isActive, setIsActive] = useState(true);
 
   useEffect(() => {
-      setBreakSeconds(breakMinutes * 60);
-      setIsActive(true)
-    },[numIteration, breakMinutes]);
+    setBreakSeconds(breakMinutes * 60); // Corrected from minutes to breakMinutes
+    setIsActive(true)
+  }, [numIteration, breakMinutes]);
 
   useEffect(() => {
       let interval;
@@ -21,13 +21,14 @@ const Pause = ({ route }) => {
         clearInterval(interval);
         setIsActive(false);
         alert('Pause is up!');
-        navigation.navigate('Timer', {
-          minutes: minutes,
-          breakMinutes: breakMinutes,
-          name: name,
-          navigation: navigation,
-          numIteration: numIteration+1
-        });
+       navigation.navigate('Timer', {
+         minutes: minutes,
+         breakMinutes: breakMinutes,
+         name: name,
+         navigation: navigation,
+         numIteration: numIteration + 1,
+         modulesHistory: modulesHistory
+       });
       }
       return () => clearInterval(interval);
     }, [isActive, breakSeconds, minutes, breakMinutes, name, navigation]);
