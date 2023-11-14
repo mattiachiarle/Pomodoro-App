@@ -27,7 +27,7 @@ const Timer = ({ route }) => {
         name: name,
         navigation: navigation,
         numIteration: numIteration + 1,
-        modulesHistory: [...modulesHistory, name] 
+        modulesHistory: [...(modulesHistory || []), name]
       });
     }
     return () => clearInterval(interval);
@@ -36,9 +36,13 @@ const Timer = ({ route }) => {
   const resetTimer = () => {
     setIsActive(false);
     navigation.navigate("SetupTimer", {
-      modulesHistory: [...modulesHistory, name] 
+      modulesHistory: [...(modulesHistory || []), name]
     });
   };
+  const extendTimer = () => {
+      setSeconds((prevSeconds) => prevSeconds + 600); // Adds 10 minutes
+    };
+
 
   const formatTime = () => {
     const displayMinutes = Math.floor(seconds / 60);
@@ -46,8 +50,8 @@ const Timer = ({ route }) => {
     return `${String(displayMinutes).padStart(2, '0')}:${String(secondsLeft).padStart(2, '0')}`;
   };
 
-  
-  const previousModules = modulesHistory.slice(0, -1);
+
+  const previousModules = modulesHistory && modulesHistory.slice(0, -1);
 
   return (
     <View style={styles.container}>
@@ -57,8 +61,9 @@ const Timer = ({ route }) => {
         <Text style={styles.timer}>{formatTime()}</Text>
       </View>
       <Button onPress={resetTimer} title="Stop" />
+      <Button onPress={extendTimer} title="Extend 10 Minutes" />
       {/* Display the history of modules, excluding the current one */}
-      {previousModules.length > 0 && (
+      {previousModules && previousModules.length > 0 && (
         <View>
           <Text style={styles.moduleHistoryLabel}>Previous Modules:</Text>
           {previousModules.map((moduleName, index) => (
