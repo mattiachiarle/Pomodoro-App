@@ -48,14 +48,35 @@ function FlashcardQuiz({route}) {
           }}>
           <Text style={styles.buttonText}>Prev</Text>
         </TouchableOpacity>
-        <TouchableOpacity
-          style={styles.button}
-          title="Show"
-          onPress={() => {
-            setShowAnswer(true);
-          }}>
-          <Text style={styles.buttonText}>Show Answer</Text>
-        </TouchableOpacity>
+        {showAnswer ? (
+          <View>
+            <TouchableOpacity
+              style={styles.button}
+              title="Show"
+              onPress={() => {
+                setShowAnswer(true);
+              }}>
+              <Text style={styles.buttonText}>Correct</Text>
+            </TouchableOpacity>
+            <TouchableOpacity
+              style={styles.button}
+              title="Show"
+              onPress={() => {
+                setShowAnswer(true);
+              }}>
+              <Text style={styles.buttonText}>Incorrect</Text>
+            </TouchableOpacity>
+          </View>
+        ) : (
+          <TouchableOpacity
+            style={styles.button}
+            title="Show"
+            onPress={() => {
+              setShowAnswer(true);
+            }}>
+            <Text style={styles.buttonText}>Show Answer</Text>
+          </TouchableOpacity>
+        )}
         <TouchableOpacity
           style={styles.button}
           title="Next"
