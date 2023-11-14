@@ -1,71 +1,76 @@
-import {useEffect, useState} from 'react';
-import {View, Text, Button, IconButton} from 'react-native-paper';
+import React from 'react';
+import { View, Text, TouchableOpacity, Image, StyleSheet } from 'react-native';
 
-const flashcardExample = {
-  name: 'example set',
-  items: [
-    {
-      question: 'This is a question 1',
-      answer: 'This is an answer',
-      seen: false,
-    },
-    {
-      question: 'This is a question 2',
-      answer: 'This is an answer 2',
-      seen: false,
-    },
-    {
-      question: 'This is a question 3',
-      answer: 'This is an answer 3',
-      seen: false,
-    },
-  ],
-};
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    alignItems: 'center',
+    justifyContent: 'center',
+    backgroundColor: '#fff', 
+  },
+  button: {
+    alignItems: 'center',
+    backgroundColor: '#DDDDDD',
+    padding: 10,
+    width: 300,
+    marginTop: 16,
+  },
+  buttonText: {
+    fontSize: 18,
+    fontWeight: 'bold',
+  },
+  flashcardsInfo: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'space-between',
+    width: 300,
+    paddingVertical: 8,
+    paddingHorizontal: 16,
+    borderWidth: 1,
+    borderColor: '#000',
+    marginTop: 16,
+  },
+  flashcardsText: {
+    fontSize: 18,
+  },
+  icon: {
+    width: 120,
+    height: 120,
+  },
+});
 
-/* async function loadSet({flashcardSetName, loadHook}) {
-  try {
-    const set = await AsyncStorage.getItem(flashcardSetName);
+function FlashcardsScreen({ navigation }) {
+  const flashcardSets = [
+    { name: 'HW1', numberCreated: 3 },
+    { name: 'HW2', numberCreated: 10 },
+    { name: 'HW3', numberCreated: 1 },
+  ];
 
-    if (set === null) return;
-    JSON.parse(set);
-  } catch (e) {
-    console.error('Failed to load flashcard set.');
-  }
-}
-
-async function saveSet({flashcardSet}) {
-  try {
-    await AsyncStorage.setItem(flashcardSet.name, flashcardSet);
-  } catch (e) {
-    console.error('Failed to load flashcard set.');
-  }
-} */
-
-function FlashcardsScreen({navigation}) {
-  const [flashcardSetName, setFlashcardSetName] = useState('Example Set 1');
-  const [flashcardSet, setFlashcardSet] = useState(flashcardExample);
+  const navigateToSetup = (setName) => {
+    navigation.navigate('FlashcardsSetup', {
+      flashcardSetName: setName,
+    });
+  };
 
   return (
-    <>
-      <Button
-        onPress={() => {
-          navigation.navigate('FlashcardsSetup', {
-            navigation: navigation,
-            flashcardSet: flashcardExample,
-            flashcardSetName: flashcardSetName,
-            flashcardSetHook: setFlashcardSet,
-          });
-        }}>
-        Flashcard quiz placeholder
-      </Button>
-      <Button
-        onPress={() => {
-          console.log(flashcardSet);
-        }}>
-        View state
-      </Button>
-    </>
+    <View style={styles.container}>
+      <Image
+        source={require('./icons/book_icon.png')}
+        style={styles.icon}
+      />
+      {flashcardSets.map((set, index) => (
+        <TouchableOpacity
+          key={index}
+          style={styles.flashcardsInfo}
+          onPress={() => navigateToSetup(set.name)}
+        >
+          <Text style={styles.flashcardsText}>{set.name}</Text>
+          <Text style={styles.flashcardsText}>{`${set.numberCreated} Flashcards created`}</Text>
+        </TouchableOpacity>
+      ))}
+    </View>
   );
 }
 
 export default FlashcardsScreen;
+
