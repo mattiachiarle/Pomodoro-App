@@ -1,14 +1,16 @@
 import React, { useState, useEffect } from 'react';
 import { View, Text, Image, StyleSheet , TouchableOpacity } from 'react-native';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 const Timer = ({ route }) => {
-  const { minutes, breakMinutes, navigation, name, numIteration, modulesHistory } = route.params;
+  const { minutes, breakMinutes, navigation, name, numIteration } = route.params;
   const [seconds, setSeconds] = useState(minutes * 60);
   const [isActive, setIsActive] = useState(true);
-
+  const [modulesHistory, setModulesHistory] = useState([]);
   useEffect(() => {
     setSeconds(minutes * 60);
     setIsActive(true);
+    loadModuleHistory();
   }, [numIteration, minutes]);
 
   useEffect(() => {
@@ -21,22 +23,41 @@ const Timer = ({ route }) => {
       clearInterval(interval);
       setIsActive(false);
       alert('Timer is up!');
+      saveModuleHistory(name);
       navigation.navigate('Pause', {
         minutes: minutes,
         breakMinutes: breakMinutes,
         name: name,
         navigation: navigation,
         numIteration: numIteration + 1,
-        modulesHistory: [...(modulesHistory || []), name]
+
       });
     }
     return () => clearInterval(interval);
   }, [isActive, seconds, navigation, minutes, breakMinutes, name]);
-
+ const loadModuleHistory = async () => {
+     try {
+       const history = await AsyncStorage.getItem('modulesHistory');
+       if (history !== null) {
+         setModulesHistory(JSON.parse(history));
+       }
+     } catch (e) {
+       console.error('Failed to load history');
+     }
+   };
+ const saveModuleHistory = async (moduleName) => {
+     try {
+       const newHistory = [...modulesHistory, moduleName];
+       await AsyncStorage.setItem('modulesHistory', JSON.stringify(newHistory));
+       setModulesHistory(newHistory);
+     } catch (e) {
+       console.error('Failed to save history');
+     }
+   };
   const resetTimer = () => {
     setIsActive(false);
     navigation.navigate("SetupTimer", {
-      modulesHistory: [...(modulesHistory || []), name]
+
     });
   };
   const extendTimer = () => {
@@ -72,17 +93,17 @@ const Timer = ({ route }) => {
            <Text style={styles.buttonText}>Extend</Text>
          </TouchableOpacity>
          {/* Display the history of modules, excluding the current one */}
-         {previousModules && previousModules.length > 0 && (
-           <View>
-             <Text style={styles.moduleHistoryLabel}>Previous Modules:</Text>
-             {previousModules.map((moduleName, index) => (
-               <Text key={index} style={styles.moduleHistoryText}>{moduleName}</Text>
-             ))}
-           </View>
-         )}
-       </View>
-  );
-};
+         {modulesHistory && modulesHistory.length > 0 && (
+                 <View>
+                   <Text style={styles.moduleHistoryLabel}>Modules History:</Text>
+                   {modulesHistory.map((moduleName, index) => (
+                     <Text key={index} style={styles.moduleHistoryText}>{moduleName}</Text>
+                   ))}
+                 </View>
+               )}
+             </View>
+           );
+         };
 
 const styles = StyleSheet.create({
   container: {

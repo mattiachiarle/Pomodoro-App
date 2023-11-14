@@ -35,7 +35,7 @@ function SetupTimer({navigation}) {
   const [name, onChangeName] = React.useState('');
   const [work, onChangeWork] = React.useState('25');
   const [breakTime, onChangeBreakTime] = React.useState('5');
-  const [modulesHistory, setModulesHistory] = React.useState([]);
+
 
   const startTimer = () => {
     const workTime = parseInt(work);
@@ -46,8 +46,7 @@ function SetupTimer({navigation}) {
       !isNaN(breakTimeInt) &&
       breakTimeInt > 0
     ) {
-      const newModulesHistory = [...modulesHistory, name].slice(-3);
-      setModulesHistory(newModulesHistory);
+
 
       navigation.navigate('Timer', {
         minutes: workTime,
@@ -55,7 +54,7 @@ function SetupTimer({navigation}) {
         name: name,
         navigation: navigation,
         numIteration: 1,
-        modulesHistory: newModulesHistory,
+
       });
     } else {
       alert('Please enter valid numbers for work and break time.');

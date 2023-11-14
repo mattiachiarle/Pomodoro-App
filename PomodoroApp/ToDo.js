@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { View, Text, TextInput, TouchableOpacity, FlatList, Button, StyleSheet } from 'react-native';
+import { View, Text, TextInput, TouchableOpacity, FlatList, Button, StyleSheet, Image } from 'react-native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
 function ToDoScreen({ route }) {
@@ -69,6 +69,7 @@ function ToDoScreen({ route }) {
 
   return (
     <View style={styles.container}>
+    <Image source={require('./icons/checklist_icon.png')} style={styles.largeIcon} />
       <TextInput
         style={styles.input}
         placeholder="Add a new ToDo"
@@ -140,6 +141,12 @@ const styles = StyleSheet.create({
     borderRadius: 6,
     backgroundColor: '#000',
   },
+   largeIcon: {
+        width: 120,
+        height: 120,
+        margin: 20,
+         alignSelf: 'center',
+      },
 });
 
 export default ToDoScreen;
