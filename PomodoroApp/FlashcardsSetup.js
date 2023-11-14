@@ -41,8 +41,13 @@ function FlashcardsSetup({route}) {
 
   useEffect(() => {
     const getFlashcards = async () => {
-      const cards = await AsyncStorage.getItem(flashcardSetName);
-      setFlashcardSet(JSON.parse(cards));
+      try {
+        console.log(flashcardSetName);
+        const cards = await AsyncStorage.getItem(flashcardSetName);
+        setFlashcardSet(JSON.parse(cards).items);
+      } catch (e) {
+        console.log(e);
+      }
     };
     getFlashcards();
   }, [flashcardSetName]);
@@ -51,7 +56,7 @@ function FlashcardsSetup({route}) {
     const res = flashcardSet.map((o, i) =>
       i == index ? {question: o.question, answer: o.answer, seen: true} : o,
     );
-    console.log(res);
+
     await AsyncStorage.setItem(flashcardSetName, JSON.stringify(res));
     setFlashcardSet(res);
   };
@@ -63,12 +68,12 @@ function FlashcardsSetup({route}) {
     }
     const unseen = flashcardSet.filter(i => i.seen == false);
 
-    if (unseen.length < unseenNumber) {
+    if (unseen.length < parseInt(unseenNumber)) {
       alert('Not enough unseen!');
       return;
     }
 
-    const selected = unseen.slice(0, unseenNumber);
+    const selected = unseen.slice(0, parseInt(unseenNumber));
 
     navigation.navigate('FlashcardQuiz', {
       flashcardSet: {name: flashcardSet.name, items: selected},
@@ -83,12 +88,13 @@ function FlashcardsSetup({route}) {
       return;
     }
 
-    if (flashcardSet.length < randomNumber) {
+    if (flashcardSet.length < parseInt(randomNumber)) {
       alert('Not enough flashcards!');
+      console.log(parseInt(randomNumber));
       return;
     }
 
-    const selected = flashcardSet.slice(0, randomNumber);
+    const selected = flashcardSet.slice(0, parseInt(randomNumber));
 
     navigation.navigate('FlashcardQuiz', {
       flashcardSet: {name: flashcardSet.name, items: selected},
@@ -131,7 +137,9 @@ function FlashcardsSetup({route}) {
           <TextInput
             style={styles.input}
             keyboardType="numeric"
-            onChangeText={setUnseenNumber}
+            onChangeText={text => {
+              setUnseenNumber(parseInt(text));
+            }}
             value={unseenNumber}
           />
         </View>
@@ -149,7 +157,9 @@ function FlashcardsSetup({route}) {
           <TextInput
             style={styles.input}
             keyboardType="numeric"
-            onChangeText={setRandomNumber}
+            onChangeText={text => {
+              setRandomNumber(parseInt(text));
+            }}
             value={randomNumber}
           />
         </View>
