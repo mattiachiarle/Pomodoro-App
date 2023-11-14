@@ -1,14 +1,15 @@
 import React, { useState, useEffect } from 'react';
 import { View, Text, Image, StyleSheet,  TouchableOpacity } from 'react-native';
-
+import AsyncStorage from '@react-native-async-storage/async-storage';
 const Pause = ({ route }) => {
-  const { minutes, breakMinutes, name, navigation, numIteration, modulesHistory } = route.params;
+  const { minutes, breakMinutes, name, navigation, numIteration} = route.params;
   const [breakSeconds, setBreakSeconds] = useState(breakMinutes * 60);
   const [isActive, setIsActive] = useState(true);
-
+   const [modulesHistory, setModulesHistory] = useState([]);
   useEffect(() => {
     setBreakSeconds(breakMinutes * 60); // Corrected from minutes to breakMinutes
     setIsActive(true)
+    loadModuleHistory();
   }, [numIteration, breakMinutes]);
 
   useEffect(() => {
@@ -27,12 +28,19 @@ const Pause = ({ route }) => {
          name: name,
          navigation: navigation,
          numIteration: numIteration + 1,
-         modulesHistory: modulesHistory
+
        });
       }
       return () => clearInterval(interval);
     }, [isActive, breakSeconds, minutes, breakMinutes, name, navigation]);
-
+    const loadModuleHistory = async () => {
+        try {
+          const history = await AsyncStorage.getItem('modulesHistory');
+          setModulesHistory(history ? JSON.parse(history) : []);
+        } catch (e) {
+          // reading error
+        }
+      };
   const formatTime = () => {
     const breakMinutes = Math.floor(breakSeconds / 60);
     const secondsLeft = breakSeconds % 60;
