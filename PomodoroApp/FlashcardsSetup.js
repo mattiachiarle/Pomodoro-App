@@ -44,12 +44,13 @@ function FlashcardsSetup({route}) {
       try {
         console.log(flashcardSetName);
         const cards = await AsyncStorage.getItem(flashcardSetName);
-        setFlashcardSet(JSON.parse(cards).items);
+        setFlashcardSet(JSON.parse(cards));
       } catch (e) {
         console.log(e);
       }
     };
     getFlashcards();
+    console.log(flashcardSet);
   }, [flashcardSetName]);
 
   const setCardSeen = async index => {
@@ -97,14 +98,17 @@ function FlashcardsSetup({route}) {
     const selected = flashcardSet.slice(0, parseInt(randomNumber));
 
     navigation.navigate('FlashcardQuiz', {
-      flashcardSet: {name: flashcardSet.name, items: selected},
+      flashcardSet: {name: flashcardSetName, items: selected},
       flashcardSetName: flashcardSetName,
       flashcardSetHook: setCardSeen,
     });
   };
 
   const reviewPastAttempts = () => {
-    //TBD
+    navigation.navigate('ReviewAttempts', {
+      name: flashcardSetName,
+      navigation: navigation,
+    });
   };
 
   const createCard = () => {

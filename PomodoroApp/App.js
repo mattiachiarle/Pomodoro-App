@@ -18,6 +18,8 @@ import {HeaderButtonsProvider} from 'react-navigation-header-buttons';
 import FlashcardsSetup from './FlashcardsSetup';
 import CreateCard from './CreateCard';
 import CreateGroup from './CreateGroup';
+import ReviewAttempts from './ReviewAttempts';
+import Attempt from './Attempt';
 
 const Stack = createNativeStackNavigator();
 
@@ -37,6 +39,8 @@ function MyTabs() {
           <Stack.Screen name="FlashcardsSetup" component={FlashcardsSetup} />
           <Stack.Screen name="CreateCard" component={CreateCard} />
           <Stack.Screen name="CreateGroup" component={CreateGroup} />
+          <Stack.Screen name="ReviewAttempts" component={ReviewAttempts} />
+          <Stack.Screen name="Attempt" component={Attempt} />
           <Stack.Screen
             name="Pause"
             component={Pause}

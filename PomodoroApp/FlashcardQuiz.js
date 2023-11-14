@@ -1,9 +1,13 @@
 import {React, useState, useEffect} from 'react';
 import {Text, TouchableOpacity, StyleSheet, View} from 'react-native';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 function FlashcardQuiz({route}) {
   const {flashcardSet, flashcardSetName, flashcardSetHook} = route.params;
   const [flashcardIndex, setFlashcardIndex] = useState(0);
+  const [attempt, setAttempt] = useState([]);
+  const [prevAttempts, setPrevAttempts] = useState([]);
+
   const [questionText, setQuestionText] = useState(
     flashcardSet.items[flashcardIndex].question,
   );
@@ -12,6 +16,19 @@ function FlashcardQuiz({route}) {
   );
   const [showAnswer, setShowAnswer] = useState(false);
   const numFlashcards = flashcardSet.items.length;
+
+  useEffect(() => {
+    const retrivePreviousAttempts = async () => {
+      const tmp = await AsyncStorage.getItem(`${flashcardSetName}-attempts`);
+      const prev = JSON.parse(tmp);
+      if (!prev) {
+        setPrevAttempts([]);
+      } else {
+        setPrevAttempts([...prev]);
+      }
+    };
+    retrivePreviousAttempts();
+  }, []);
 
   useEffect(() => {
     resetText();
@@ -25,6 +42,41 @@ function FlashcardQuiz({route}) {
     flashcardSetHook(flashcardIndex);
     return;
   }
+
+  const updateAttempt = async (index, correct) => {
+    console.log(attempt);
+    const inserted = attempt.filter(a => a.id === index);
+    console.log(inserted);
+
+    const updatedAttempt =
+      inserted.length > 0
+        ? attempt.map(a =>
+            a.id === index
+              ? {
+                  id: index,
+                  question: flashcardSet.items[index].question,
+                  answer: flashcardSet.items[index].answer,
+                  correct: correct,
+                }
+              : a,
+          )
+        : [
+            ...attempt,
+            {
+              id: index,
+              question: flashcardSet.items[index].question,
+              answer: flashcardSet.items[index].answer,
+              correct: correct,
+            },
+          ];
+
+    const jsonAttempt = JSON.stringify([...prevAttempts, updatedAttempt]);
+    await AsyncStorage.setItem(`${flashcardSetName}-attempts`, jsonAttempt);
+
+    setAttempt(updatedAttempt);
+
+    console.log(attempt);
+  };
 
   return (
     <View style={styles.page}>
@@ -54,7 +106,7 @@ function FlashcardQuiz({route}) {
               style={styles.button}
               title="Show"
               onPress={() => {
-                setShowAnswer(true);
+                updateAttempt(flashcardIndex, true);
               }}>
               <Text style={styles.buttonText}>Correct</Text>
             </TouchableOpacity>
@@ -62,7 +114,7 @@ function FlashcardQuiz({route}) {
               style={styles.button}
               title="Show"
               onPress={() => {
-                setShowAnswer(true);
+                updateAttempt(flashcardIndex, false);
               }}>
               <Text style={styles.buttonText}>Incorrect</Text>
             </TouchableOpacity>
