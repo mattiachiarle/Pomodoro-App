@@ -1,7 +1,8 @@
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import {useEffect, useState} from 'react';
+import {useEffect, useState, useCallback} from 'react';
 import {View, Text, StyleSheet, TextInput, Image} from 'react-native';
 import {Button} from 'react-native-paper';
+import {useIsFocused} from '@react-navigation/native';
 
 const styles = StyleSheet.create({
   container: {
@@ -39,7 +40,12 @@ function FlashcardsSetup({route}) {
   const [flashcardSet, setFlashcardSet] = useState([]);
   const {navigation, flashcardSetName} = route.params;
 
-  useEffect(() => {
+  const isFocused = useIsFocused();
+
+  const refreshScreen = useCallback(async () => {
+      await getFlashcards();
+    }, []);
+
     const getFlashcards = async () => {
       try {
         console.log(flashcardSetName);
@@ -48,10 +54,14 @@ function FlashcardsSetup({route}) {
       } catch (e) {
         console.log(e);
       }
-    };
-    getFlashcards();
-    console.log(flashcardSet);
-  }, [flashcardSetName]);
+    }
+
+  useEffect(() => {
+      if (isFocused) {
+        console.log('Screen focused. Refreshing...');
+        refreshScreen();
+      }
+    }, [isFocused, refreshScreen]);
 
   const setCardSeen = async index => {
     const res = flashcardSet.map((o, i) =>

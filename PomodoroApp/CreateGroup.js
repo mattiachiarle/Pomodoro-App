@@ -10,8 +10,8 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
   input: {
-    height: 200,
-    width: 300,
+    height: 40,
+    width: 150,
     margin: 12,
     borderWidth: 1,
     padding: 10,
