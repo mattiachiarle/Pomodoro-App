@@ -7,9 +7,9 @@ const Pause = ({ route }) => {
   const [isActive, setIsActive] = useState(true);
 
   useEffect(() => {
-      setBreakSeconds(minutes * 60);
+      setBreakSeconds(breakMinutes * 60);
       setIsActive(true)
-    },[numIteration]);
+    },[numIteration, breakMinutes]);
 
   useEffect(() => {
       let interval;
@@ -38,72 +38,86 @@ const Pause = ({ route }) => {
     return `${String(breakMinutes).padStart(2, '0')}:${String(secondsLeft).padStart(2, '0')}`;
   };
 
-  return (
-    <View style={styles.container}>
-    <Text style={styles.titleText}>Break!</Text>
-    <Image source={require('./icons/timer_icon.png')} style={styles.icon} />
-      <View style={styles.box}>
-        <Text style={styles.timer}>{formatTime()}</Text>
-      </View>
-      <TouchableOpacity
-              style={styles.todoButton}
+ return (
+   <View style={styles.container}>
+     <Text style={styles.titleText}>Break!</Text>
+     <Image source={require('./icons/timer_icon.png')} style={styles.largeIcon} />
 
-              onPress={() => navigation.navigate('ToDo', {
-                fromScreen: 'Pause',
-                breakSeconds: breakSeconds,
-                minutes: minutes,
-                breakMinutes: breakMinutes,
-                name: name,
-                numIteration: numIteration,
-                navigation: navigation,
-              })}
-            >
-            <Text style={styles.buttonText}>Track your ToDos</Text>
-            </TouchableOpacity>
-    </View>
-  );
-};
+     <View style={styles.timerContainer}>
+       <Image source={require('./icons/bed.png')} style={styles.smallIcon} />
+       <View style={styles.box}>
+         <Text style={styles.timer}>{formatTime()}</Text>
+       </View>
+     </View>
+
+     <TouchableOpacity
+       style={styles.todoButton}
+       onPress={() => navigation.navigate('ToDo', {
+         fromScreen: 'Pause',
+         breakSeconds: breakSeconds,
+         minutes: minutes,
+         breakMinutes: breakMinutes,
+         name: name,
+         numIteration: numIteration,
+         navigation: navigation,
+       })}
+     >
+       <Text style={styles.buttonText}>Track your ToDos</Text>
+     </TouchableOpacity>
+   </View>
+ );
+  };
 
 const styles = StyleSheet.create({
   container: {
-    flex: 1,
-    justifyContent: 'center',
-    alignItems: 'center',
-  },
-  titleText: {
+      flex: 1,
+      justifyContent: 'center',
+      alignItems: 'center',
+    },
+    titleText: {
       fontSize: 24,
       fontWeight: 'bold',
-       color: 'black',
-      textDecorationLine: 'underline', // Underline the title
-      marginBottom: 20, // Space above the timer box
+      textDecorationLine: 'underline',
+      marginBottom: 20,
+      color: 'black',
     },
-  box: {
-    borderWidth: 2,
-    borderColor: 'black',
-    padding: 20,
-    marginBottom: 32,
-  },
-  timer: {
-    fontSize: 48,
-  },
-  icon: {
+    largeIcon: {
       width: 120,
       height: 120,
       margin: 20,
     },
-      todoButton: {
-        borderWidth: 1,
-        borderColor: 'blue',
-        padding: 10,
-        borderRadius: 5,
-        //alignSelf: 'stretch',
-        marginHorizontal: 20,
+    timerContainer: {
+        flexDirection: 'row', // Align items in a row
+        alignItems: 'center', // Center items vertically in the row
+        marginBottom: 32, // Space below the entire timer section
       },
-      buttonText: {
-          color: 'black',
-          textAlign: 'center',
-          fontSize: 16,
-        }
+      smallIcon: {
+        width: 45, // Adjust size as needed
+        height: 45, // Adjust size as needed
+        marginRight: 10, // Space between the icon and the box
+      },
+      box: {
+        borderWidth: 2,
+        borderColor: 'black',
+        padding: 20,
+        justifyContent: 'center', // Center the timer text vertically
+        alignItems: 'center', // Center the timer text horizontally
+      },
+    timer: {
+      fontSize: 48,
+    },
+    todoButton: {
+      borderWidth: 1,
+      borderColor: 'blue',
+      padding: 10,
+      borderRadius: 5,
+      marginHorizontal: 20,
+    },
+    buttonText: {
+      color: 'black',
+      textAlign: 'center',
+      fontSize: 16,
+    },
 });
 
 export default Pause;
