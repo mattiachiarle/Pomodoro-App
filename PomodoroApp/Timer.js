@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { View, Text, Image, StyleSheet, Button } from 'react-native';
+import { View, Text, Image, StyleSheet , TouchableOpacity } from 'react-native';
 
 const Timer = ({ route }) => {
   const { minutes, breakMinutes, navigation, name, numIteration, modulesHistory } = route.params;
@@ -27,7 +27,7 @@ const Timer = ({ route }) => {
         name: name,
         navigation: navigation,
         numIteration: numIteration + 1,
-        modulesHistory: [...modulesHistory, name] 
+        modulesHistory: [...(modulesHistory || []), name]
       });
     }
     return () => clearInterval(interval);
@@ -36,9 +36,13 @@ const Timer = ({ route }) => {
   const resetTimer = () => {
     setIsActive(false);
     navigation.navigate("SetupTimer", {
-      modulesHistory: [...modulesHistory, name] 
+      modulesHistory: [...(modulesHistory || []), name]
     });
   };
+  const extendTimer = () => {
+      setSeconds((prevSeconds) => prevSeconds + 600); // Adds 10 minutes
+    };
+
 
   const formatTime = () => {
     const displayMinutes = Math.floor(seconds / 60);
@@ -46,27 +50,32 @@ const Timer = ({ route }) => {
     return `${String(displayMinutes).padStart(2, '0')}:${String(secondsLeft).padStart(2, '0')}`;
   };
 
-  
-  const previousModules = modulesHistory.slice(0, -1);
+
+  const previousModules = modulesHistory && modulesHistory.slice(0, -1);
 
   return (
     <View style={styles.container}>
-      <Text style={styles.nameText}>{name}</Text>
-      <Image source={require('./icons/timer_icon.png')} style={styles.icon} />
-      <View style={styles.box}>
-        <Text style={styles.timer}>{formatTime()}</Text>
-      </View>
-      <Button onPress={resetTimer} title="Stop" />
-      {/* Display the history of modules, excluding the current one */}
-      {previousModules.length > 0 && (
-        <View>
-          <Text style={styles.moduleHistoryLabel}>Previous Modules:</Text>
-          {previousModules.map((moduleName, index) => (
-            <Text key={index} style={styles.moduleHistoryText}>{moduleName}</Text>
-          ))}
+          <Text style={styles.nameText}>{name}</Text>
+          <Image source={require('./icons/timer_icon.png')} style={styles.icon} />
+          <View style={styles.box}>
+            <Text style={styles.timer}>{formatTime()}</Text>
+          </View>
+          <TouchableOpacity style={styles.stopButton} onPress={resetTimer}>
+            <Text style={styles.buttonText}>Stop</Text>
+          </TouchableOpacity>
+          <TouchableOpacity style={styles.extendButton} onPress={extendTimer}>
+            <Text style={styles.buttonText}>Extend</Text>
+          </TouchableOpacity>
+          {/* Display the history of modules, excluding the current one */}
+          {previousModules && previousModules.length > 0 && (
+            <View>
+              <Text style={styles.moduleHistoryLabel}>Previous Modules:</Text>
+              {previousModules.map((moduleName, index) => (
+                <Text key={index} style={styles.moduleHistoryText}>{moduleName}</Text>
+              ))}
+            </View>
+          )}
         </View>
-      )}
-    </View>
   );
 };
 
@@ -77,9 +86,38 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
   nameText: {
-    fontSize: 24,
-    fontWeight: 'bold',
-  },
+      fontSize: 24,
+      color: 'black',
+      fontWeight: 'bold',
+      fontSize: 25,
+      textDecorationLine: 'underline', // Underline the title
+    },
+     stopButton: {
+        borderWidth: 2, // Increased border width
+        borderColor: 'red',
+        paddingVertical: 20, // Increased vertical padding
+        paddingHorizontal: 55, // Increased horizontal padding
+        borderRadius: 8, // Slightly larger border radius for a rounded look
+        marginVertical: 12, // Adjusted space between buttons
+        //alignSelf: 'stretch', // Stretch to fit container width
+        marginHorizontal: 20, // Add horizontal margin if needed
+      },
+      extendButton: {
+        borderWidth: 2, // Increased border width
+        borderColor: 'blue',
+        paddingVertical: 10, // Increased vertical padding
+        paddingHorizontal: 20, // Increased horizontal padding
+        borderRadius: 8, // Slightly larger border radius for a rounded look
+        //alignSelf: 'stretch', // Stretch to fit container width
+        marginHorizontal: 20, // Add horizontal margin if needed
+      },
+      buttonText: {
+        color: 'black',
+        textAlign: 'center',
+        fontSize: 25, // Increased font size for better visibility
+        fontWeight: 'bold', // Optional: making the text bold
+      },
+
   moduleHistoryLabel: {
     fontSize: 18,
     fontWeight: 'bold',

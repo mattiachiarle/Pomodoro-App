@@ -1,10 +1,8 @@
 import {useEffect, useState} from 'react';
 import {View, Text, Button, IconButton} from 'react-native-paper';
-import AsyncStorage from '@react-native-async-storage/async-storage';
-import {Alert} from 'react-native';
 
 const flashcardExample = {
-  name: 'Example Set 1',
+  name: 'example set',
   items: [
     {
       question: 'This is a question 1',
@@ -24,17 +22,28 @@ const flashcardExample = {
   ],
 };
 
-async function saveSet(flashcardSet) {
+/* async function loadSet({flashcardSetName, loadHook}) {
   try {
-    await AsyncStorage.setItem(flashcardSet.name, JSON.stringify(flashcardSet));
-    Alert.alert('flashcards saved successfully');
+    const set = await AsyncStorage.getItem(flashcardSetName);
+
+    if (set === null) return;
+    JSON.parse(set);
   } catch (e) {
-    console.error(e);
+    console.error('Failed to load flashcard set.');
   }
 }
 
+async function saveSet({flashcardSet}) {
+  try {
+    await AsyncStorage.setItem(flashcardSet.name, flashcardSet);
+  } catch (e) {
+    console.error('Failed to load flashcard set.');
+  }
+} */
+
 function FlashcardsScreen({navigation}) {
   const [flashcardSetName, setFlashcardSetName] = useState('Example Set 1');
+  const [flashcardSet, setFlashcardSet] = useState(flashcardExample);
 
   return (
     <>
@@ -42,16 +51,18 @@ function FlashcardsScreen({navigation}) {
         onPress={() => {
           navigation.navigate('FlashcardsSetup', {
             navigation: navigation,
+            flashcardSet: flashcardExample,
             flashcardSetName: flashcardSetName,
+            flashcardSetHook: setFlashcardSet,
           });
         }}>
         Flashcard quiz placeholder
       </Button>
       <Button
         onPress={() => {
-          saveSet(flashcardExample);
+          console.log(flashcardSet);
         }}>
-        Save flashcard set
+        View state
       </Button>
     </>
   );
